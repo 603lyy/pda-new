@@ -35,9 +35,6 @@ public class MainActivity extends BaseActivity {
         llReport = findViewById(R.id.ll_report);
         llManage = findViewById(R.id.ll_manage);
 
-//        sm = new ScanDevice();
-//        sm.setOutScanMode(0); //接收广播
-
         llBind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,41 +43,6 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-    }
-
-    private BroadcastReceiver mScanReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // TODO Auto-generated method stub
-            byte[] barocode = intent.getByteArrayExtra("barocode");
-            int barocodelen = intent.getIntExtra("length", 0);
-            byte temp = intent.getByteExtra("barcodeType", (byte) 0);
-            android.util.Log.i("debug", "----codetype--" + temp);
-            barcodeStr = new String(barocode, 0, barocodelen);
-            tvBind.setText(barcodeStr);
-            sm.stopScan();
-        }
-
-    };
-
-    @Override
-    protected void onPause() {
-        // TODO Auto-generated method stub
-        super.onPause();
-        if (sm != null) {
-            sm.stopScan();
-        }
-        unregisterReceiver(mScanReceiver);
-    }
-
-    @Override
-    protected void onResume() {
-        // TODO Auto-generated method stub
-        super.onResume();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(SCAN_ACTION);
-        registerReceiver(mScanReceiver, filter);
     }
 
 }
