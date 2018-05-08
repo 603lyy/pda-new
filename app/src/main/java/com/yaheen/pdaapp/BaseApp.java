@@ -5,17 +5,18 @@ import android.app.Instrumentation;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.tencent.bugly.crashreport.CrashReport;
 import com.yaheen.pdaapp.util.FreeHandSystemUtil;
 
-abstract public class Application extends android.app.Application {
-    private static Application instance;
+public class BaseApp extends android.app.Application {
+    private static BaseApp instance;
 
     private static Thread mUIThread;
 
     // 安全可靠的设备唯一码
     private String safeUUid;
 
-    public Application() {
+    public BaseApp() {
     }
 
     /**
@@ -23,7 +24,7 @@ abstract public class Application extends android.app.Application {
      * 
      * @param context
      */
-    public Application(final Context context) {
+    public BaseApp(final Context context) {
         this();
         attachBaseContext(context);
     }
@@ -33,12 +34,12 @@ abstract public class Application extends android.app.Application {
      * 
      * @param instrumentation
      */
-    public Application(final Instrumentation instrumentation) {
+    public BaseApp(final Instrumentation instrumentation) {
         this();
         attachBaseContext(instrumentation.getTargetContext());
     }
 
-    public static Application getInstance() {
+    public static BaseApp getInstance() {
         return instance;
     }
 
@@ -49,8 +50,8 @@ abstract public class Application extends android.app.Application {
         // 生成设备唯一ID
         safeUUid = FreeHandSystemUtil.getSafeUUID(this);
         mUIThread = Thread.currentThread();
-        // Perform injection
-        // FacadeInjector.init(getRootModule(), this);
+        //bugly崩溃收集
+        CrashReport.initCrashReport(getApplicationContext(), "fc6c41d098", true);
     }
 
     public String getSafeUUid() {

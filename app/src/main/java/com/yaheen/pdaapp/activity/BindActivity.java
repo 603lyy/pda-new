@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tencent.bugly.crashreport.CrashReport;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.util.nfc.AESUtils;
 import com.yaheen.pdaapp.util.nfc.Converter;
@@ -78,7 +79,6 @@ public class BindActivity extends BaseActivity {
 
         init();
         initNFC();
-
     }
 
     private void init() {

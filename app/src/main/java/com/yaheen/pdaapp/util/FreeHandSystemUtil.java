@@ -13,7 +13,7 @@ import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
-import com.yaheen.pdaapp.Application;
+import com.yaheen.pdaapp.BaseApp;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -42,7 +42,7 @@ public class FreeHandSystemUtil {
      */
     public static boolean isRunInUiThread() {
         Thread currThread = Thread.currentThread();
-        if (currThread == Application.getUIThread()) {
+        if (currThread == BaseApp.getUIThread()) {
             return true;
         }
         return false;
