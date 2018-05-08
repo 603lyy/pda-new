@@ -1,9 +1,21 @@
 <resources>
     <string name="app_name">PdaApp</string>
     <string name="title_activity_bind">BindActivity</string>
+
     <string name="bind_activity_short_link">短链接：</string>
     <string name="bind_activity_chip">芯片id：</string>
     <string name="bind_activity_scan">扫描</string>
     <string name="bind_activity_fetch">读取</string>
     <string name="bind_activity_commit">绑定</string>
+
+
+    <string name="msg_sex_text">性别：</string>
+    <string name="msg_id_text">门牌号：</string>
+    <string name="msg_phone_text">电话：</string>
+    <string name="msg_mobile_text">手机：</string>
+    <string name="msg_address_text">地址：</string>
+    <string name="msg_community_text">社区：</string>
+    <string name="msg_username_text">用户名：</string>
+    <string name="msg_peoplenumber_text">人数：</string>
+    <string name="msg_party_member_text">党员户：</string>
 </resources>

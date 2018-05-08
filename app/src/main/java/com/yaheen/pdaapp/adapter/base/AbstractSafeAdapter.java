@@ -1,5 +1,5 @@
 
-package com.yaheen.pdaapp.adapter;
+package com.yaheen.pdaapp.adapter.base;
 
 import android.content.Context;
 import android.database.DataSetObserver;

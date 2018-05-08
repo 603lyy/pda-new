@@ -43,6 +43,14 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        llManage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,ManageActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }
