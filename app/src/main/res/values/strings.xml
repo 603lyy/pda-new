@@ -2,6 +2,8 @@
     <string name="app_name">PdaApp</string>
     <string name="title_activity_bind">BindActivity</string>
 
+    <string name="title_bar_msg_text">门牌信息</string>
+
     <string name="bind_activity_short_link">短链接：</string>
     <string name="bind_activity_chip">芯片id：</string>
     <string name="bind_activity_scan">扫描</string>
