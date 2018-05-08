@@ -4,8 +4,10 @@ package com.yaheen.pdaapp;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.smtt.sdk.QbSdk;
 import com.yaheen.pdaapp.util.FreeHandSystemUtil;
 
 public class BaseApp extends android.app.Application {
@@ -52,6 +54,23 @@ public class BaseApp extends android.app.Application {
         mUIThread = Thread.currentThread();
         //bugly崩溃收集
         CrashReport.initCrashReport(getApplicationContext(), "fc6c41d098", true);
+
+        //x5内核
+        QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {
+
+            @Override
+            public void onViewInitFinished(boolean b) {
+                //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
+                Log.d("app", " onViewInitFinished is " + b);
+            }
+
+            @Override
+            public void onCoreInitFinished() {
+                // TODO Auto-generated method stub
+            }
+        };
+        //x5内核初始化接口
+        QbSdk.initX5Environment(getApplicationContext(), cb);
     }
 
     public String getSafeUUid() {

@@ -51,6 +51,14 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+
+        llMsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this,WebActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 }
