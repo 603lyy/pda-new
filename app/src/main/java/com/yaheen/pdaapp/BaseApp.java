@@ -10,6 +10,8 @@ import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.smtt.sdk.QbSdk;
 import com.yaheen.pdaapp.util.FreeHandSystemUtil;
 
+import org.xutils.x;
+
 public class BaseApp extends android.app.Application {
     private static BaseApp instance;
 
@@ -52,8 +54,13 @@ public class BaseApp extends android.app.Application {
         // 生成设备唯一ID
         safeUUid = FreeHandSystemUtil.getSafeUUID(this);
         mUIThread = Thread.currentThread();
+
         //bugly崩溃收集
         CrashReport.initCrashReport(getApplicationContext(), "fc6c41d098", true);
+
+        //网络请求
+        x.Ext.init(this);
+        x.Ext.setDebug(false); //输出debug日志，开启会影响性能
 
         //x5内核
         QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {

@@ -18,10 +18,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.yaheen.pdaapp.R;
+import com.yaheen.pdaapp.bean.BindBean;
+import com.yaheen.pdaapp.util.ProgersssDialog;
 import com.yaheen.pdaapp.util.nfc.AESUtils;
 import com.yaheen.pdaapp.util.nfc.Converter;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,6 +42,10 @@ public class BindActivity extends BaseActivity {
 
     private ScanDevice sm;
 
+    private Gson gson = new Gson();
+
+    private ProgersssDialog dialog;
+
     private NfcB nfcbTag;
     private Tag tagFromIntent;
     private NfcAdapter mNfcAdapter;
@@ -43,9 +54,11 @@ public class BindActivity extends BaseActivity {
 
     private TextView tvFetch, tvFetchShow, tvScan, tvScanShow, tvCommit;
 
-    private String barcodeStr;
+    private String url = "http://192.168.199.114:8080/shortlink/eai/updateLongLink.do";
 
     private String ex_id = "", types = "";
+
+    private String barcodeStr;
 
     //是否可以读芯片
     private boolean load = false;
@@ -77,7 +90,15 @@ public class BindActivity extends BaseActivity {
             }
         });
 
-        init();
+        tvCommit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog = new ProgersssDialog(BindActivity.this);
+                bind();
+            }
+        });
+
+//        init();
         initNFC();
     }
 
@@ -112,6 +133,57 @@ public class BindActivity extends BaseActivity {
         mNdefExchangeFilters = new IntentFilter[]{ndefDetected, ttech, td};
     }
 
+    private void bind() {
+
+        String slink = tvScanShow.getText().toString();
+        String chip = tvFetchShow.getText().toString();
+
+        if (TextUtils.isEmpty(slink)) {
+            Toast.makeText(this, R.string.bind_activity_short_link_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (TextUtils.isEmpty(chip)) {
+            Toast.makeText(this, R.string.bind_activity_chip_empty, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        RequestParams params = new RequestParams(url);
+        params.addQueryStringParameter("key", "7zbQUBNY0XkEcUoushaJD7UcKyWkc91q");
+        params.addQueryStringParameter("shortLinkCode", chip);
+        params.addQueryStringParameter("note", "1994");
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                BindBean bindBean = gson.fromJson(result, BindBean.class);
+                if (bindBean != null && bindBean.isResult()) {
+                    Toast.makeText(BindActivity.this,
+                            R.string.bind_activity_bind_success, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(BindActivity.this,
+                            R.string.bind_activity_bind_fail, Toast.LENGTH_SHORT).show();
+                }
+                clearData();
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
     private BroadcastReceiver mScanReceiver = new BroadcastReceiver() {
 
         @Override
@@ -127,6 +199,11 @@ public class BindActivity extends BaseActivity {
         }
 
     };
+
+    private void clearData(){
+        tvScanShow.setText("");
+        tvFetchShow.setText("");
+    }
 
     private void resolvIntent(Intent intent) {
         if (!load) {
