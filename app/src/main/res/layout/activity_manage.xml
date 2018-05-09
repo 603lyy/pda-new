@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,12 +7,20 @@
     android:orientation="vertical"
     tools:context=".activity.ManageActivity">
 
-    <include layout="@layout/item_title_bar" />
+    <include
+        android:id="@+id/common_loading_view"
+        layout="@layout/common_loading_view"
+        android:visibility="gone"/>
+
+    <include
+        android:id="@+id/title_bar"
+        layout="@layout/item_title_bar" />
 
     <ListView
         android:id="@+id/lv_msg"
+        android:layout_below="@+id/title_bar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"/>
 
-</LinearLayout>
+</RelativeLayout>

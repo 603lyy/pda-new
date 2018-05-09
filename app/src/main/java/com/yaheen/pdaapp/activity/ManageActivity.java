@@ -9,6 +9,7 @@ import android.widget.ListView;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.adapter.ManageMsgAdapter;
 import com.yaheen.pdaapp.bean.MsgBean;
+import com.yaheen.pdaapp.util.ProgersssDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,13 @@ public class ManageActivity extends BaseActivity {
 
     private ListView listView;
 
-    private LinearLayout llBack;
+    private LinearLayout llBack, llLoading;
 
     private ManageMsgAdapter msgAdapter;
+
+    private ProgersssDialog progersssDialog;
+
+    private boolean isLoading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +33,11 @@ public class ManageActivity extends BaseActivity {
 
         setTitleContent(R.string.title_bar_msg_text);
 
+        llLoading = findViewById(R.id.common_loading_view);
         listView = findViewById(R.id.lv_msg);
         llBack = findViewById(R.id.back);
+
+        progersssDialog = new ProgersssDialog(this);
 
         msgAdapter = new ManageMsgAdapter(this);
         listView.setAdapter(msgAdapter);
@@ -45,7 +53,7 @@ public class ManageActivity extends BaseActivity {
 
     private void initLocalMsg() {
         MsgBean bean = new MsgBean();
-        MsgBean.EntityBean  entityBean = new MsgBean.EntityBean();
+        MsgBean.EntityBean entityBean = new MsgBean.EntityBean();
         entityBean.setCommunity("车陂生活区");
         entityBean.setUsername("梁玉兰");
         entityBean.setId("20180502");
@@ -60,6 +68,11 @@ public class ManageActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
+        if (isLoading) {
+            llLoading.setVisibility(View.GONE);
+            isLoading = false;
+            return;
+        }
         super.onBackPressed();
     }
 }
