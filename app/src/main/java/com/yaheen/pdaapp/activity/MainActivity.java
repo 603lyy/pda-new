@@ -10,7 +10,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.yaheen.pdaapp.BaseApp;
 import com.yaheen.pdaapp.R;
+import com.yaheen.pdaapp.util.DialogUtils;
+import com.yaheen.pdaapp.util.dialog.DialogCallback;
+import com.yaheen.pdaapp.util.dialog.IDialogCancelCallback;
 
 public class MainActivity extends BaseActivity {
 
@@ -61,4 +65,17 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        DialogUtils.showDialog(MainActivity.this, "确定要退出该APP吗？", new DialogCallback() {
+            @Override
+            public void callback() {
+                BaseApp.exit();
+            }
+        }, new IDialogCancelCallback() {
+            @Override
+            public void cancelCallback() {
+            }
+        });
+    }
 }

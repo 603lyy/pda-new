@@ -1,6 +1,7 @@
 
 package com.yaheen.pdaapp;
 
+import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.text.TextUtils;
@@ -95,5 +96,13 @@ public class BaseApp extends android.app.Application {
      */
     public static Thread getUIThread() {
         return mUIThread;
+    }
+
+
+    /**
+     * 应用退出，结束所有的activity,没有考虑到多线程环境下的退出
+     */
+    public static void exit() {
+        System.exit(0);
     }
 }
