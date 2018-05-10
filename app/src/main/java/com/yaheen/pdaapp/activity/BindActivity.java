@@ -6,11 +6,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.device.ScanDevice;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
 import android.nfc.tech.NfcB;
+import android.nfc.tech.NfcV;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -19,19 +23,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.tencent.bugly.crashreport.CrashReport;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.bean.BindBean;
 import com.yaheen.pdaapp.util.ProgersssDialog;
 import com.yaheen.pdaapp.util.nfc.AESUtils;
 import com.yaheen.pdaapp.util.nfc.Converter;
+import com.yaheen.pdaapp.util.nfc.NfcVUtil;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Base64;
 
 import static com.yaheen.pdaapp.util.nfc.NFCUtils.ByteArrayToHexString;
 import static com.yaheen.pdaapp.util.nfc.NFCUtils.toStringHex;
@@ -98,7 +104,7 @@ public class BindActivity extends BaseActivity {
             }
         });
 
-//        init();
+        init();
         initNFC();
     }
 
@@ -259,7 +265,75 @@ public class BindActivity extends BaseActivity {
         if (list.contains("android.nfc.tech.MifareUltralight")) {
             String str = readTagUltralight(tag);
             setNoteBody(str);
+        }else if (list.contains("android.nfc.tech.NfcV")) {//完成
+            NfcV tech = NfcV.get(tag);
+            if (tech != null) {
+                try {
+                    tech.connect();
+                    if (tech.isConnected()) {
+                        NfcVUtil nfcVUtil = new NfcVUtil(tech);
+                        String str = "测";
+                        byte[] by = str.getBytes();
+//                        nfcVUtil.writeBlock(5,by);
+                        nfcVUtil.readOneBlock(2);
+//                        byte[] tagUid = tag.getId();  // store tag UID for use in addressed commands
+//
+//                        int blockAddress = 0;
+//                        int blocknum = 4;
+//                        byte[] cmd = new byte[]{
+//                                (byte) 0x22,  // FLAGS
+//                                (byte) 0x23,  // 20-READ_SINGLE_BLOCK,23-所有块
+//                                0, 0, 0, 0, 0, 0, 0, 0,
+//                                (byte) (blockAddress & 0x0ff), (byte) (blocknum - 1 & 0x0ff)
+//                        };
+//                        System.arraycopy(tagUid, 0, cmd, 2, tagUid.length);  // paste tag UID into command
+//
+//                        byte[] response = tech.transceive(cmd);
+                        tech.close();
+//                        if (response != null) {
+//                            setNoteBody(new String(response, Charset.forName("utf-8")));
+//                        }
+                    }
+                } catch (IOException e) {
+
+                }
+            }
+        } else if (list.contains("android.nfc.tech.NdefFormatable")) {
+            NdefMessage[] messages = getNdefMessages(getIntent());
+            byte[] payload = messages[0].getRecords()[0].getPayload();
+            setNoteBody(new String(payload));
         }
+    }
+
+    NdefMessage[] getNdefMessages(Intent intent) {
+        //读取nfc数据
+        // Parse the intent
+
+        NdefMessage[] msgs = null;
+        String action = intent.getAction();
+        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
+                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            if (rawMsgs != null) {
+                msgs = new NdefMessage[rawMsgs.length];
+                for (int i = 0; i < rawMsgs.length; i++) {
+                    msgs[i] = (NdefMessage) rawMsgs[i];
+                }
+            } else {
+                // Unknown tag type
+                byte[] empty = new byte[]{};
+                NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, empty, empty);
+                NdefMessage msg = new NdefMessage(new NdefRecord[]{
+                        record
+                });
+                msgs = new NdefMessage[]{
+                        msg
+                };
+            }
+        } else {
+            finish();
+        }
+        return msgs;
     }
 
     public String readTagUltralight(Tag tag) {
