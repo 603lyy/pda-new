@@ -93,6 +93,7 @@ public class BindActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 load = true;
+                tvFetch.setBackground(getResources().getDrawable(R.drawable.btn_gary_round));
             }
         });
 
@@ -206,7 +207,7 @@ public class BindActivity extends BaseActivity {
 
     };
 
-    private void clearData(){
+    private void clearData() {
         tvScanShow.setText("");
         tvFetchShow.setText("");
     }
@@ -265,7 +266,7 @@ public class BindActivity extends BaseActivity {
         if (list.contains("android.nfc.tech.MifareUltralight")) {
             String str = readTagUltralight(tag);
             setNoteBody(str);
-        }else if (list.contains("android.nfc.tech.NfcV")) {//完成
+        } else if (list.contains("android.nfc.tech.NfcV")) {//完成
             NfcV tech = NfcV.get(tag);
             if (tech != null) {
                 try {
@@ -418,6 +419,7 @@ public class BindActivity extends BaseActivity {
         } else {
             Toast.makeText(BindActivity.this, "读取芯片失败", Toast.LENGTH_SHORT).show();
         }
+        tvFetch.setBackground(getResources().getDrawable(R.drawable.btn_red_round));
     }
 
     @Override
