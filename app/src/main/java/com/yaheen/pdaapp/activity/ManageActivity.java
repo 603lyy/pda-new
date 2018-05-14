@@ -37,7 +37,7 @@ public class ManageActivity extends BaseActivity {
         listView = findViewById(R.id.lv_msg);
         llBack = findViewById(R.id.back);
 
-        progersssDialog = new ProgersssDialog(this);
+//        progersssDialog = new ProgersssDialog(this);
 
         msgAdapter = new ManageMsgAdapter(this);
         listView.setAdapter(msgAdapter);
@@ -59,8 +59,6 @@ public class ManageActivity extends BaseActivity {
         entityBean.setId("20180502");
         bean.setEntity(entityBean);
         List<MsgBean> beanList = new ArrayList<>();
-        beanList.add(bean);
-        beanList.add(bean);
         beanList.add(bean);
         msgAdapter.setDatas(beanList);
         msgAdapter.notifyDataSetChanged();

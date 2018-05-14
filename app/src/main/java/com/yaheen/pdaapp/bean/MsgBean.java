@@ -13,6 +13,9 @@ public class MsgBean implements Serializable {
     private boolean result;
     private EntityBean entity;
 
+    //实体类变量的个数
+    public static int num = 20;
+
     public boolean isResult() {
         return result;
     }

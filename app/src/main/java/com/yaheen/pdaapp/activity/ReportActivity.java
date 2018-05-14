@@ -1,6 +1,5 @@
 package com.yaheen.pdaapp.activity;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,6 +18,7 @@ import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +51,9 @@ public class ReportActivity extends BaseActivity {
     private PendingIntent mNfcPendingIntent;
     private IntentFilter[] mNdefExchangeFilters;
 
-    private TextView tvScan,tvAddress,tvFetch,tvFetchShow,tvCommit;
+    private TextView tvScan, tvAddress, tvFetch, tvFetchShow, tvCommit;
+
+    private LinearLayout llBack;
 
     private String ex_id = "", types = "";
 
@@ -67,11 +69,19 @@ public class ReportActivity extends BaseActivity {
 
         setTitleContent(R.string.report_title_content);
 
+        llBack = findViewById(R.id.back);
         tvScan = findViewById(R.id.tv_scan);
         tvFetch = findViewById(R.id.tv_fetch);
         tvCommit = findViewById(R.id.tv_commit);
         tvAddress = findViewById(R.id.tv_address);
         tvFetchShow = findViewById(R.id.tv_fetch_show);
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         tvScan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,26 +217,13 @@ public class ReportActivity extends BaseActivity {
                     tech.connect();
                     if (tech.isConnected()) {
                         NfcVUtil nfcVUtil = new NfcVUtil(tech);
-                        String str = "测";
+                        String str = "";
                         byte[] by = str.getBytes();
 //                        nfcVUtil.writeBlock(5,by);
-                        nfcVUtil.readOneBlock(2);
-//                        byte[] tagUid = tag.getId();  // store tag UID for use in addressed commands
-//
-//                        int blockAddress = 0;
-//                        int blocknum = 4;
-//                        byte[] cmd = new byte[]{
-//                                (byte) 0x22,  // FLAGS
-//                                (byte) 0x23,  // 20-READ_SINGLE_BLOCK,23-所有块
-//                                0, 0, 0, 0, 0, 0, 0, 0,
-//                                (byte) (blockAddress & 0x0ff), (byte) (blocknum - 1 & 0x0ff)
-//                        };
-//                        System.arraycopy(tagUid, 0, cmd, 2, tagUid.length);  // paste tag UID into command
-//
-//                        byte[] response = tech.transceive(cmd);
+                        str = nfcVUtil.readOneBlock(2);
                         tech.close();
 //                        if (response != null) {
-//                            setNoteBody(new String(response, Charset.forName("utf-8")));
+                            setNoteBody(str);
 //                        }
                     }
                 } catch (IOException e) {
@@ -349,6 +346,7 @@ public class ReportActivity extends BaseActivity {
 //                String s = longLink + chipNum;
 //                etLongLink.setText(s);
 //            }
+            tvFetchShow.setText(body);
             load = false;
         } else {
             Toast.makeText(ReportActivity.this, "读取芯片失败", Toast.LENGTH_SHORT).show();

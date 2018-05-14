@@ -19,6 +19,11 @@ public class ManageMsgAdapter extends CommonAdapter<MsgBean> {
     }
 
     @Override
+    public int getCount() {
+        return MsgBean.num;
+    }
+
+    @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
         final ViewHolder holder;
         if (convertView == null) {
@@ -28,7 +33,7 @@ public class ManageMsgAdapter extends CommonAdapter<MsgBean> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        final MsgBean data = getItem(position);
+        final MsgBean data = getItem(0);
         if(data!=null){
             if(position==0){
                 holder.tvDescribe.setText(R.string.msg_community_text);
