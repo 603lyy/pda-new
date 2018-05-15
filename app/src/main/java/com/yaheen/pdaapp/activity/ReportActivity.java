@@ -86,7 +86,7 @@ public class ReportActivity extends BaseActivity {
         tvScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                scanUtils.open();
+                scanUtils.start();
             }
         });
 

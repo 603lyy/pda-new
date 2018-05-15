@@ -33,6 +33,8 @@ public class WebActivity extends BaseActivity {
 
     private String url = "http://wxyq.020szsq.com/app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile&r=member.getDoorMessage";
 
+    private String shortCode;
+
     @SuppressLint("JavascriptInterface")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class WebActivity extends BaseActivity {
         setContentView(R.layout.activity_web);
 
         mViewParent = (ViewGroup) findViewById(R.id.web_parent);
+
+        shortCode = getIntent().getStringExtra("shortCode");
 
         init();
     }

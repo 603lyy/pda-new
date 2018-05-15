@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.yaheen.pdaapp.BaseApp;
 import com.yaheen.pdaapp.R;
@@ -42,7 +43,6 @@ public class MainActivity extends BaseActivity {
         llBind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                sm.startScan();
                 Intent intent = new Intent(MainActivity.this, BindActivity.class);
                 startActivity(intent);
             }
@@ -59,8 +59,8 @@ public class MainActivity extends BaseActivity {
         llMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,WebActivity.class);
-                startActivity(intent);
+                Toast.makeText(MainActivity.this, R.string.main_activity_scan,Toast.LENGTH_SHORT).show();
+                scanUtils.start();
             }
         });
 
@@ -71,6 +71,42 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private BroadcastReceiver mScanReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            byte[] barocode = intent.getByteArrayExtra("barocode");
+            int barocodelen = intent.getIntExtra("length", 0);
+            barcodeStr = new String(barocode, 0, barocodelen);
+            scanUtils.stop();
+            startWebActivity(barcodeStr);
+        }
+
+    };
+
+    private void startWebActivity(String code){
+        Intent intent = new Intent(MainActivity.this,WebActivity.class);
+        intent.putExtra("shortCode",code);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SCAN_ACTION);
+        registerReceiver(mScanReceiver, filter);
+    }
+
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        scanUtils.stop();
+        unregisterReceiver(mScanReceiver);
     }
 
     @Override

@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,9 +34,7 @@ import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Base64;
 
 import static com.yaheen.pdaapp.util.nfc.NFCUtils.ByteArrayToHexString;
 import static com.yaheen.pdaapp.util.nfc.NFCUtils.toStringHex;
@@ -83,7 +80,7 @@ public class BindActivity extends BaseActivity {
         tvScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                scanUtils.open();
+                scanUtils.start();
             }
         });
 
