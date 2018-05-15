@@ -83,9 +83,7 @@ public class BindActivity extends BaseActivity {
         tvScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (sm.isScanOpened()) {
-                    sm.startScan();
-                }
+                scanUtils.open();
             }
         });
 
@@ -105,13 +103,7 @@ public class BindActivity extends BaseActivity {
             }
         });
 
-        init();
         initNFC();
-    }
-
-    private void init() {
-        sm = new ScanDevice();
-        sm.setOutScanMode(0); //接收广播
     }
 
     private void initNFC() {
@@ -202,7 +194,7 @@ public class BindActivity extends BaseActivity {
             android.util.Log.i("debug", "----codetype--" + temp);
             barcodeStr = new String(barocode, 0, barocodelen);
             tvScanShow.setText(barcodeStr);
-            sm.stopScan();
+            scanUtils.stop();
         }
 
     };
@@ -436,9 +428,7 @@ public class BindActivity extends BaseActivity {
     protected void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
-        if (sm != null) {
-            sm.stopScan();
-        }
+        scanUtils.stop();
         unregisterReceiver(mScanReceiver);
     }
 
