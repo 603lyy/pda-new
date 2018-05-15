@@ -408,7 +408,7 @@ public class BindActivity extends BaseActivity {
         } else {
             Toast.makeText(BindActivity.this, "读取芯片失败", Toast.LENGTH_SHORT).show();
         }
-        tvFetch.setBackground(getResources().getDrawable(R.drawable.btn_red_round));
+        tvFetch.setBackground(getResources().getDrawable(R.drawable.btn_blue_round));
     }
 
     @Override
