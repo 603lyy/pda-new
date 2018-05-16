@@ -57,7 +57,6 @@ public class MsgBean implements Serializable {
         private String mobile;
         private String userName;
         private String userId;
-        private int longOperatedDate;
         private String peopleNumber;
         private String category;
         private String partyMember;
@@ -146,14 +145,6 @@ public class MsgBean implements Serializable {
 
         public void setUserId(String userId) {
             this.userId = userId;
-        }
-
-        public int getLongOperatedDate() {
-            return longOperatedDate;
-        }
-
-        public void setLongOperatedDate(int longOperatedDate) {
-            this.longOperatedDate = longOperatedDate;
         }
 
         public String getPeopleNumber() {

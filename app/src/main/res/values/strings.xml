@@ -12,6 +12,7 @@
     <string name="bind_activity_scan">扫描</string>
     <string name="bind_activity_fetch">读取</string>
     <string name="bind_activity_commit">绑定</string>
+    <string name="bind_activity_change">修改</string>
     <string name="bind_activity_short_link_empty">短链接不能为空</string>
     <string name="bind_activity_chip_empty">芯片id不能为空</string>
     <string name="bind_activity_bind_success">绑定成功</string>

@@ -9,10 +9,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.adapter.ManageMsgAdapter;
 import com.yaheen.pdaapp.bean.MsgBean;
 import com.yaheen.pdaapp.util.ProgersssDialog;
+import com.yaheen.pdaapp.util.nfc.Base64;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -25,7 +27,7 @@ public class ManageActivity extends BaseActivity {
 
     private ListView listView;
 
-    private TextView tvCommit;
+    private TextView tvCommit, tvLoad;
 
     private LinearLayout llBack, llLoading;
 
@@ -48,10 +50,9 @@ public class ManageActivity extends BaseActivity {
 
         llLoading = findViewById(R.id.common_loading_view);
         tvCommit = findViewById(R.id.tv_commit);
+        tvLoad = findViewById(R.id.tv_load);
         listView = findViewById(R.id.lv_msg);
         llBack = findViewById(R.id.back);
-
-//        progersssDialog = new ProgersssDialog(this);
 
         msgAdapter = new ManageMsgAdapter(this);
         listView.setAdapter(msgAdapter);
@@ -67,6 +68,15 @@ public class ManageActivity extends BaseActivity {
         tvCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                changeInformation();
+//                msgAdapter.getMsg();
+            }
+        });
+
+        tvLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progersssDialog = new ProgersssDialog(ManageActivity.this);
                 getInformation();
             }
         });
@@ -83,17 +93,44 @@ public class ManageActivity extends BaseActivity {
     private void getInformation() {
         RequestParams requestParams = new RequestParams(url);
         requestParams.addQueryStringParameter("chipId", "123");
-        requestParams.addHeader("Accept","text/html,application/xhtml+xml,application/xml;");
-        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
                 MsgBean msgBean = gson.fromJson(result, MsgBean.class);
-                if(msgBean!=null){
+                if (msgBean != null) {
                     List<MsgBean.EntityBean> beanList = new ArrayList<>();
                     beanList.add(msgBean.getEntity());
                     msgAdapter.setDatas(beanList);
                     msgAdapter.notifyDataSetChanged();
                 }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+                progersssDialog.dismiss();
+            }
+        });
+    }
+
+    private void changeInformation() {
+        RequestParams requestParams = new RequestParams("http://lyl.tunnel.echomod.cn/whnsubhekou/houseNumberRelation/updateAppByJson.do");
+        requestParams.addParameter("json",Base64.encode(msgAdapter.getMsg().getBytes()));
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
             }
 
             @Override
