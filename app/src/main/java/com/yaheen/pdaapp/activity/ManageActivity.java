@@ -55,7 +55,6 @@ public class ManageActivity extends BaseActivity {
         MsgBean bean = new MsgBean();
         MsgBean.EntityBean entityBean = new MsgBean.EntityBean();
         entityBean.setCommunity("车陂生活区");
-        entityBean.setUsername("梁玉兰");
         entityBean.setId("20180502");
         bean.setEntity(entityBean);
         List<MsgBean> beanList = new ArrayList<>();

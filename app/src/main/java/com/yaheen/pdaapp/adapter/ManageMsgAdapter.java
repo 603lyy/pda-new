@@ -40,7 +40,7 @@ public class ManageMsgAdapter extends CommonAdapter<MsgBean> {
                 holder.etDetail.setText(data.getEntity().getCommunity());
             }else if(position==1){
                 holder.tvDescribe.setText(R.string.msg_username_text);
-                holder.etDetail.setText(data.getEntity().getUsername());
+//                holder.etDetail.setText(data.getEntity().getUsername());
             }else if(position==2){
                 holder.tvDescribe.setText(R.string.msg_id_text);
                 holder.etDetail.setText(data.getEntity().getId());

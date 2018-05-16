@@ -2,26 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/tv_describe"
-        android:text="sdfsfdddd"
-        android:layout_width="wrap_content"
-        android:layout_marginLeft="20dp"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
         android:maxLines="1"
-        android:textSize="16dp"
-        android:layout_height="wrap_content" />
+        android:text="sdfsdd"
+        android:textSize="16dp" />
 
     <EditText
         android:id="@+id/et_detail"
-        android:layout_marginLeft="10dp"
-        android:background="@null"
-        android:text="1213223"
-        android:layout_width="wrap_content"
-        android:singleLine="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:padding="5dp"
+        android:background="@drawable/edittext_background_gray"
         android:maxLines="1"
-        android:layout_height="wrap_content" />
+        android:singleLine="true"
+        android:text="1213223" />
 
 </LinearLayout>
