@@ -18,6 +18,7 @@ import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,8 @@ public class BindActivity extends BaseActivity {
 
     private TextView tvFetch, tvFetchShow, tvScan, tvScanShow, tvCommit;
 
+    private LinearLayout llBack;
+
     private String url = "http://192.168.199.114:8080/shortlink/eai/updateLongLink.do";
 
     private String ex_id = "", types = "";
@@ -71,11 +74,19 @@ public class BindActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind);
 
+        llBack = findViewById(R.id.back);
         tvScan = findViewById(R.id.tv_scan);
         tvFetch = findViewById(R.id.tv_fetch);
         tvCommit = findViewById(R.id.tv_commit);
         tvScanShow = findViewById(R.id.tv_scan_show);
         tvFetchShow = findViewById(R.id.tv_fetch_show);
+
+        llBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         tvScan.setOnClickListener(new View.OnClickListener() {
             @Override
