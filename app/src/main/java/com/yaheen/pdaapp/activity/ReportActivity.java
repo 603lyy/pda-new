@@ -26,8 +26,13 @@ import com.google.gson.Gson;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.util.ProgersssDialog;
 import com.yaheen.pdaapp.util.nfc.AESUtils;
+import com.yaheen.pdaapp.util.nfc.Base64;
 import com.yaheen.pdaapp.util.nfc.Converter;
 import com.yaheen.pdaapp.util.nfc.NfcVUtil;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,6 +63,8 @@ public class ReportActivity extends BaseActivity {
     private String ex_id = "", types = "";
 
     private String barcodeStr;
+
+    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/tool/reportByApp.do";
 
     //是否可以读芯片
     private boolean load = false;
@@ -95,6 +102,13 @@ public class ReportActivity extends BaseActivity {
             public void onClick(View view) {
                 load = true;
                 tvFetch.setBackground(getResources().getDrawable(R.drawable.btn_gary_round));
+            }
+        });
+
+        tvCommit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                commit();
             }
         });
 
@@ -142,6 +156,33 @@ public class ReportActivity extends BaseActivity {
         }
 
     };
+
+    private void commit() {
+        RequestParams requestParams = new RequestParams(url);
+        requestParams.addParameter("chipId", "123456");
+        requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
+        x.http().post(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
 
     private void clearData() {
         tvAddress.setText("");
