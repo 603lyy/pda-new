@@ -2,14 +2,21 @@ package com.yaheen.pdaapp.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.adapter.ManageMsgAdapter;
 import com.yaheen.pdaapp.bean.MsgBean;
 import com.yaheen.pdaapp.util.ProgersssDialog;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +25,19 @@ public class ManageActivity extends BaseActivity {
 
     private ListView listView;
 
+    private TextView tvCommit;
+
     private LinearLayout llBack, llLoading;
 
     private ManageMsgAdapter msgAdapter;
 
     private ProgersssDialog progersssDialog;
 
+    private Gson gson = new Gson();
+
     private boolean isLoading = false;
+
+    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/houseNumberRelation/getAllHouseNumberByChip.do";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +47,7 @@ public class ManageActivity extends BaseActivity {
         setTitleContent(R.string.title_bar_msg_text);
 
         llLoading = findViewById(R.id.common_loading_view);
+        tvCommit = findViewById(R.id.tv_commit);
         listView = findViewById(R.id.lv_msg);
         llBack = findViewById(R.id.back);
 
@@ -49,18 +63,54 @@ public class ManageActivity extends BaseActivity {
                 onBackPressed();
             }
         });
+
+        tvCommit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getInformation();
+            }
+        });
     }
 
     private void initLocalMsg() {
-        MsgBean bean = new MsgBean();
         MsgBean.EntityBean entityBean = new MsgBean.EntityBean();
-        entityBean.setCommunity("车陂生活区");
-        entityBean.setId("20180502");
-        bean.setEntity(entityBean);
-        List<MsgBean> beanList = new ArrayList<>();
-        beanList.add(bean);
+        List<MsgBean.EntityBean> beanList = new ArrayList<>();
+        beanList.add(entityBean);
         msgAdapter.setDatas(beanList);
         msgAdapter.notifyDataSetChanged();
+    }
+
+    private void getInformation() {
+        RequestParams requestParams = new RequestParams(url);
+        requestParams.addQueryStringParameter("chipId", "123");
+        requestParams.addHeader("Accept","text/html,application/xhtml+xml,application/xml;");
+        x.http().get(requestParams, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                MsgBean msgBean = gson.fromJson(result, MsgBean.class);
+                if(msgBean!=null){
+                    List<MsgBean.EntityBean> beanList = new ArrayList<>();
+                    beanList.add(msgBean.getEntity());
+                    msgAdapter.setDatas(beanList);
+                    msgAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
     }
 
     @Override

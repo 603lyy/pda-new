@@ -24,8 +24,9 @@
     <string name="msg_mobile_text">手机：</string>
     <string name="msg_address_text">地址：</string>
     <string name="msg_community_text">社区：</string>
-    <string name="msg_username_text">用户名：</string>
-    <string name="msg_peoplenumber_text">人数：</string>
+    <string name="msg_username_text">户主：</string>
+    <string name="msg_people_number_text">人数：</string>
+    <string name="msg_category_text">类别：</string>
     <string name="msg_party_member_text">党员户：</string>
 
     <string name="report_title_content">报障</string>
