@@ -31,7 +31,7 @@ public class WebActivity extends BaseActivity {
 
     private X5WebView mWebView;
 
-    private String url = "http://wxyq.020szsq.com/app/index.php?i=2&c=entry&m=ewei_shopv2&do=mobile&r=member.getDoorMessage";
+    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do?shortLinkCode=wjTFqsg";
 
     private String shortCode;
 

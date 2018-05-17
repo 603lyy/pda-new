@@ -60,7 +60,7 @@ public class BindActivity extends BaseActivity {
 
     private LinearLayout llBack;
 
-    private String url = "http://192.168.199.114:8080/shortlink/eai/updateLongLink.do";
+    private String url = "http://shortlink.cn/eai/updateLongLink.do";
 
     private String ex_id = "", types = "";
 
@@ -157,7 +157,7 @@ public class BindActivity extends BaseActivity {
 
         RequestParams params = new RequestParams(url);
         params.addQueryStringParameter("key", "7zbQUBNY0XkEcUoushaJD7UcKyWkc91q");
-        params.addQueryStringParameter("shortLinkCode", chip);
+        params.addQueryStringParameter("shortLinkCode", "wjTFqsg");
         params.addQueryStringParameter("note", "1994");
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -171,12 +171,12 @@ public class BindActivity extends BaseActivity {
                             R.string.bind_activity_bind_fail, Toast.LENGTH_SHORT).show();
                 }
                 clearData();
-                dialog.dismiss();
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(BindActivity.this,
+                        R.string.bind_activity_bind_fail, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -186,7 +186,7 @@ public class BindActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-
+                dialog.dismiss();
             }
         });
     }

@@ -1,6 +1,9 @@
 package com.yaheen.pdaapp.adapter;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,8 @@ import com.yaheen.pdaapp.bean.MsgBean;
 
 public class ManageMsgAdapter extends CommonAdapter<MsgBean.EntityBean> {
 
+    private boolean change = false;
+
     public ManageMsgAdapter(Context ctx) {
         super(ctx);
     }
@@ -26,7 +31,7 @@ public class ManageMsgAdapter extends CommonAdapter<MsgBean.EntityBean> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup viewGroup) {
+    public View getView(final int position, View convertView, ViewGroup viewGroup) {
         final ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.item_manage_msg, null);
@@ -65,6 +70,40 @@ public class ManageMsgAdapter extends CommonAdapter<MsgBean.EntityBean> {
                 holder.tvDescribe.setText(R.string.msg_party_member_text);
                 holder.etDetail.setText(data.getPartyMember());
             }
+            holder.etDetail.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                    if (position == 0) {
+                        data.setCommunity(holder.etDetail.getText().toString());
+                    } else if (position == 1) {
+                        data.setUserName(holder.etDetail.getText().toString());
+                    } else if (position == 2) {
+                        data.setSex(holder.etDetail.getText().toString());
+                    } else if (position == 3) {
+                        data.setAddress(holder.etDetail.getText().toString());
+                    } else if (position == 4) {
+                        data.setMobile(holder.etDetail.getText().toString());
+                    } else if (position == 5) {
+                        data.setTelephone(holder.etDetail.getText().toString());
+                    } else if (position == 6) {
+                        data.setPeopleNumber(holder.etDetail.getText().toString());
+                    } else if (position == 7) {
+                        data.setCategory(holder.etDetail.getText().toString());
+                    } else if (position == 8) {
+                        data.setPartyMember(holder.etDetail.getText().toString());
+                    }
+                }
+            });
         }
         return convertView;
     }
@@ -76,6 +115,20 @@ public class ManageMsgAdapter extends CommonAdapter<MsgBean.EntityBean> {
             return gson.toJson(data);
         }
         return "";
+    }
+
+    /**
+     * 判断是否读取了门牌数据
+     */
+    public boolean hasId(){
+        MsgBean.EntityBean data = getItem(0);
+        if(data!=null){
+            if(!TextUtils.isEmpty(data.getId())||!TextUtils.isEmpty(data.getUserId())
+                    ||!TextUtils.isEmpty(data.getHouseNumberId())){
+                return true;
+            }
+        }
+        return false;
     }
 
     class ViewHolder {
