@@ -54,7 +54,7 @@ public class MainActivity extends BaseActivity {
         llMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, R.string.main_activity_scan, Toast.LENGTH_SHORT).show();
+                showToast(R.string.main_activity_scan);
                 scanUtils.start();
             }
         });

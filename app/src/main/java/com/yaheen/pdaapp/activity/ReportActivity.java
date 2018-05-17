@@ -124,7 +124,7 @@ public class ReportActivity extends BaseActivity {
         String shortLinkCode = tvAddress.getText().toString();
 
         if (TextUtils.isEmpty(chipId) && TextUtils.isEmpty(shortLinkCode)) {
-            Toast.makeText(this, R.string.report_empty_toast, Toast.LENGTH_SHORT).show();
+            showToast(R.string.report_empty_toast);
             return;
         }
 
@@ -145,15 +145,15 @@ public class ReportActivity extends BaseActivity {
                 ReportBean reportBean = gson.fromJson(result, ReportBean.class);
                 if (reportBean != null && reportBean.isResult()) {
                     clearData();
-                    Toast.makeText(ReportActivity.this, R.string.report_success, Toast.LENGTH_SHORT).show();
+                    showToast(R.string.report_success);
                 } else {
-                    Toast.makeText(ReportActivity.this, R.string.report_fail, Toast.LENGTH_SHORT).show();
+                    showToast(R.string.report_fail);
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(ReportActivity.this, R.string.report_fail, Toast.LENGTH_SHORT).show();
+                showToast(R.string.report_fail);
             }
 
             @Override
@@ -180,7 +180,7 @@ public class ReportActivity extends BaseActivity {
             tvFetchShow.setText(body);
             setLoadState(false);
         } else {
-            Toast.makeText(ReportActivity.this, "读取芯片失败", Toast.LENGTH_SHORT).show();
+            showToast(R.string.fetch_chip_fail);
         }
         tvFetch.setBackground(getResources().getDrawable(R.drawable.btn_blue_round));
     }

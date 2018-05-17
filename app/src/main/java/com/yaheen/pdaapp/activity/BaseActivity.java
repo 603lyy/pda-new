@@ -26,6 +26,7 @@ import com.yaheen.pdaapp.util.nfc.AESUtils;
 import com.yaheen.pdaapp.util.nfc.Converter;
 import com.yaheen.pdaapp.util.nfc.NfcVUtil;
 import com.yaheen.pdaapp.util.scan.ScanUtils;
+import com.yaheen.pdaapp.util.toast.ToastUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,6 +49,8 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
     private TextView tvContent;
 
     protected ScanUtils scanUtils;
+
+    private ToastUtils toastUtils = new ToastUtils();
 
     //是否可以读芯片
     private boolean load = false;
@@ -94,6 +97,10 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
         IntentFilter td = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         IntentFilter ttech = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
         mNdefExchangeFilters = new IntentFilter[]{ndefDetected, ttech, td};
+    }
+
+    public void showToast(int string){
+        toastUtils.showToast(string,this);
     }
 
     public void showLoadingDialog() {

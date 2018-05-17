@@ -104,12 +104,12 @@ public class BindActivity extends BaseActivity {
         String chip = tvFetchShow.getText().toString();
 
         if (TextUtils.isEmpty(slink)) {
-            Toast.makeText(this, R.string.bind_activity_short_link_empty, Toast.LENGTH_SHORT).show();
+            showToast(R.string.bind_activity_short_link_empty);
             return;
         }
 
         if (TextUtils.isEmpty(chip)) {
-            Toast.makeText(this, R.string.bind_activity_chip_empty, Toast.LENGTH_SHORT).show();
+            showToast(R.string.bind_activity_chip_empty);
             return;
         }
 
@@ -122,19 +122,16 @@ public class BindActivity extends BaseActivity {
             public void onSuccess(String result) {
                 BindBean bindBean = gson.fromJson(result, BindBean.class);
                 if (bindBean != null && bindBean.isResult()) {
-                    Toast.makeText(BindActivity.this,
-                            R.string.bind_activity_bind_success, Toast.LENGTH_SHORT).show();
+                    showToast(R.string.bind_activity_bind_success);
                 } else {
-                    Toast.makeText(BindActivity.this,
-                            R.string.bind_activity_bind_fail, Toast.LENGTH_SHORT).show();
+                    showToast(R.string.bind_activity_bind_fail);
                 }
                 clearData();
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(BindActivity.this,
-                        R.string.bind_activity_bind_fail, Toast.LENGTH_SHORT).show();
+                showToast(R.string.bind_activity_bind_fail);
             }
 
             @Override
@@ -144,7 +141,7 @@ public class BindActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-                cancelLoadingDialog();
+               cancelLoadingDialog();
             }
         });
     }
@@ -177,7 +174,7 @@ public class BindActivity extends BaseActivity {
             tvFetchShow.setText(body);
             setLoadState(false);
         } else {
-            Toast.makeText(BindActivity.this, "读取芯片失败", Toast.LENGTH_SHORT).show();
+            showToast(R.string.fetch_chip_fail);
         }
         tvFetch.setBackground(getResources().getDrawable(R.drawable.btn_blue_round));
     }

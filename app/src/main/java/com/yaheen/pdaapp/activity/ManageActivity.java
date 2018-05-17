@@ -30,6 +30,7 @@ import com.yaheen.pdaapp.util.nfc.AESUtils;
 import com.yaheen.pdaapp.util.nfc.Base64;
 import com.yaheen.pdaapp.util.nfc.Converter;
 import com.yaheen.pdaapp.util.nfc.NfcVUtil;
+import com.yaheen.pdaapp.util.toast.ToastUtils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -146,7 +147,7 @@ public class ManageActivity extends BaseActivity {
 
     private void changeInformation() {
         if (!msgAdapter.hasId()) {
-            Toast.makeText(ManageActivity.this, R.string.msg_get_information_request, Toast.LENGTH_SHORT).show();
+            showToast(R.string.msg_get_information_request);
             return;
         }
         showLoadingDialog();
@@ -158,15 +159,15 @@ public class ManageActivity extends BaseActivity {
             public void onSuccess(String result) {
                 MsgUpdateBean updateBean = gson.fromJson(result, MsgUpdateBean.class);
                 if (updateBean != null || updateBean.isResult()) {
-                    Toast.makeText(ManageActivity.this, R.string.msg_update_success, Toast.LENGTH_SHORT).show();
+                    showToast(R.string.msg_update_success);
                 } else {
-                    Toast.makeText(ManageActivity.this, R.string.msg_update_fail, Toast.LENGTH_SHORT).show();
+                    showToast(R.string.msg_update_fail);
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(ManageActivity.this, R.string.msg_update_fail, Toast.LENGTH_SHORT).show();
+                showToast(R.string.msg_update_fail);
             }
 
             @Override
@@ -189,7 +190,7 @@ public class ManageActivity extends BaseActivity {
             getInformation(body);
             setLoadState(false);
         } else {
-            Toast.makeText(ManageActivity.this, "读取芯片失败", Toast.LENGTH_SHORT).show();
+            showToast(R.string.fetch_chip_fail);
         }
         tvLoad.setBackground(getResources().getDrawable(R.drawable.btn_blue_round));
     }
