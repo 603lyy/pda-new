@@ -146,7 +146,7 @@ public class NfcVUtil {
         cmd[1] = (byte) 0x21;
         System.arraycopy(ID, 0, cmd, 2, ID.length); // UID
         // block
-        cmd[10] = (byte) 0x02;
+        cmd[10] = (byte) 0x04;
         //value
         System.arraycopy(data, 0, cmd, 11, data.length);
         byte[]rsp = mNfcV.transceive(cmd);

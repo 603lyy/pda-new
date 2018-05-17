@@ -157,8 +157,8 @@ public class BindActivity extends BaseActivity {
 
         RequestParams params = new RequestParams(url);
         params.addQueryStringParameter("key", "7zbQUBNY0XkEcUoushaJD7UcKyWkc91q");
-        params.addQueryStringParameter("shortLinkCode", "wjTFqsg");
-        params.addQueryStringParameter("note", "1994");
+        params.addQueryStringParameter("shortLinkCode", "9SzulHE");
+        params.addQueryStringParameter("note", "1817");
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
@@ -222,25 +222,6 @@ public class BindActivity extends BaseActivity {
             tagFromIntent = getIntent()
                     .getParcelableExtra(NfcAdapter.EXTRA_TAG);
             getresult(tagFromIntent);
-//            Parcelable[] rawMsgs = getIntent().getParcelableArrayExtra(
-//                    NfcAdapter.EXTRA_NDEF_MESSAGES);
-//            NdefMessage[] msgs;
-//            if (rawMsgs != null) {
-//                msgs = new NdefMessage[rawMsgs.length];
-//                for (int i = 0; i < rawMsgs.length; i++) {
-//                    msgs[i] = (NdefMessage) rawMsgs[i];
-//                }
-//            } else {
-//                // Unknown tag type
-//                byte[] empty = new byte[]{};
-//                NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN,   //NdefRecord.TNF_UNKNOWN
-//                        empty, empty, empty);
-//                NdefMessage msg = new NdefMessage(new NdefRecord[]{record});
-//                msgs = new NdefMessage[]{msg};
-//            }
-//            setUpWebView(msgs);
-            // dialog(ByteArrayToHexString(msgs[0].getRecords()[0].getPayload()));
-            //	dialog(msgs[0].getRecords()[0].getPayload()));
         } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
             // 处理该intent
             tagFromIntent = getIntent()
@@ -273,27 +254,12 @@ public class BindActivity extends BaseActivity {
                     tech.connect();
                     if (tech.isConnected()) {
                         NfcVUtil nfcVUtil = new NfcVUtil(tech);
-                        String str = "测";
+                        String str = "";
                         byte[] by = str.getBytes();
 //                        nfcVUtil.writeBlock(5,by);
-                        nfcVUtil.readOneBlock(2);
-//                        byte[] tagUid = tag.getId();  // store tag UID for use in addressed commands
-//
-//                        int blockAddress = 0;
-//                        int blocknum = 4;
-//                        byte[] cmd = new byte[]{
-//                                (byte) 0x22,  // FLAGS
-//                                (byte) 0x23,  // 20-READ_SINGLE_BLOCK,23-所有块
-//                                0, 0, 0, 0, 0, 0, 0, 0,
-//                                (byte) (blockAddress & 0x0ff), (byte) (blocknum - 1 & 0x0ff)
-//                        };
-//                        System.arraycopy(tagUid, 0, cmd, 2, tagUid.length);  // paste tag UID into command
-//
-//                        byte[] response = tech.transceive(cmd);
+                        str = nfcVUtil.readBlocks(0,27);
                         tech.close();
-//                        if (response != null) {
-//                            setNoteBody(new String(response, Charset.forName("utf-8")));
-//                        }
+                        setNoteBody(str);
                     }
                 } catch (IOException e) {
 
@@ -408,13 +374,7 @@ public class BindActivity extends BaseActivity {
     private void setNoteBody(final String body) {
 
         if (!TextUtils.isEmpty(body)) {
-            String[] bodys = body.trim().split("\\|");
-
-//            if (bodys.length >= 2) {
-//                chipNum = bodys[1];
-//                String s = longLink + chipNum;
-//                etLongLink.setText(s);
-//            }
+            tvFetchShow.setText(body);
             load = false;
         } else {
             Toast.makeText(BindActivity.this, "读取芯片失败", Toast.LENGTH_SHORT).show();

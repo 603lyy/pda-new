@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.yaheen.pdaapp.R;
+import com.yaheen.pdaapp.bean.ReportBean;
 import com.yaheen.pdaapp.util.ProgersssDialog;
 import com.yaheen.pdaapp.util.nfc.AESUtils;
 import com.yaheen.pdaapp.util.nfc.Base64;
@@ -101,6 +102,7 @@ public class ReportActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 load = true;
+                tvFetchShow.setText("");
                 tvFetch.setBackground(getResources().getDrawable(R.drawable.btn_gary_round));
             }
         });
@@ -160,27 +162,38 @@ public class ReportActivity extends BaseActivity {
     private void commit() {
         String chipId = tvFetchShow.getText().toString();
         String shortLinkCode = tvAddress.getText().toString();
+
         if (TextUtils.isEmpty(chipId) && TextUtils.isEmpty(shortLinkCode)) {
             Toast.makeText(this, R.string.report_empty_toast, Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        dialog = new ProgersssDialog(this);
+
         RequestParams requestParams = new RequestParams(url);
         if (!TextUtils.isEmpty(chipId)) {
             requestParams.addParameter("chipId", chipId);
         }
         if (!TextUtils.isEmpty(shortLinkCode)) {
+            shortLinkCode = shortLinkCode.substring(shortLinkCode.lastIndexOf("/") + 1);
             requestParams.addParameter("shortLinkCode", shortLinkCode);
         }
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                clearData();
-                Toast.makeText(ReportActivity.this, R.string.report_success, Toast.LENGTH_SHORT).show();
+                ReportBean reportBean = gson.fromJson(result, ReportBean.class);
+                if (reportBean != null && reportBean.isResult()) {
+                    clearData();
+                    Toast.makeText(ReportActivity.this, R.string.report_success, Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(ReportActivity.this, R.string.report_fail, Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                Toast.makeText(ReportActivity.this, R.string.report_fail, Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -190,7 +203,7 @@ public class ReportActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-
+                dialog.dismiss();
             }
         });
     }
@@ -266,9 +279,7 @@ public class ReportActivity extends BaseActivity {
 //                        nfcVUtil.writeBlock(5,by);
                         str = nfcVUtil.readOneBlock(2);
                         tech.close();
-//                        if (response != null) {
                         setNoteBody(str);
-//                        }
                     }
                 } catch (IOException e) {
 
@@ -383,13 +394,6 @@ public class ReportActivity extends BaseActivity {
     private void setNoteBody(final String body) {
 
         if (!TextUtils.isEmpty(body)) {
-            String[] bodys = body.trim().split("\\|");
-
-//            if (bodys.length >= 2) {
-//                chipNum = bodys[1];
-//                String s = longLink + chipNum;
-//                etLongLink.setText(s);
-//            }
             tvFetchShow.setText(body);
             load = false;
         } else {

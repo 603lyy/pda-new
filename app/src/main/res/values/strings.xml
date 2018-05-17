@@ -28,7 +28,8 @@
     <string name="msg_people_number_text">人数：</string>
     <string name="msg_category_text">类别：</string>
     <string name="msg_party_member_text">党员户：</string>
-    <string name="msg_get_information_request">请先读取门牌信息</string>
+    <string name="msg_get_information_request">请先获取门牌信息</string>
+    <string name="msg_get_chip_id_request">请读取门牌ID</string>
     <string name="msg_update_success">修改成功</string>
     <string name="msg_update_fail">修改失败</string>
 
@@ -39,4 +40,5 @@
     <string name="report_scan">扫描</string>
     <string name="report_empty_toast">请扫描二维码或读取门牌ID</string>
     <string name="report_success">报障成功</string>
+    <string name="report_fail">报障失败</string>
 </resources>
