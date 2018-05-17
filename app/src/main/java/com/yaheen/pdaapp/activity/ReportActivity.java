@@ -51,24 +51,13 @@ public class ReportActivity extends BaseActivity {
 
     private ProgersssDialog dialog;
 
-    private NfcB nfcbTag;
-    private Tag tagFromIntent;
-    private NfcAdapter mNfcAdapter;
-    private PendingIntent mNfcPendingIntent;
-    private IntentFilter[] mNdefExchangeFilters;
-
     private TextView tvScan, tvAddress, tvFetch, tvFetchShow, tvCommit;
 
     private LinearLayout llBack;
 
-    private String ex_id = "", types = "";
-
     private String barcodeStr;
 
     private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/tool/reportByApp.do";
-
-    //是否可以读芯片
-    private boolean load = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +90,7 @@ public class ReportActivity extends BaseActivity {
         tvFetch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                load = true;
+                setLoadState(true);
                 tvFetchShow.setText("");
                 tvFetch.setBackground(getResources().getDrawable(R.drawable.btn_gary_round));
             }
@@ -114,33 +103,6 @@ public class ReportActivity extends BaseActivity {
             }
         });
 
-        initNFC();
-    }
-
-    private void initNFC() {
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);// 设备注册
-        if (mNfcAdapter == null) {
-            // 判断设备是否可用
-            Toast.makeText(this, "该设备不支持NFC功能", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!mNfcAdapter.isEnabled()) {
-            Toast.makeText(this, "请在系统设置中先启用NFC功能！", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(Settings.ACTION_NFC_SETTINGS));
-        }
-        mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
-                getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-
-        IntentFilter ndefDetected = new IntentFilter(
-                NfcAdapter.ACTION_NDEF_DISCOVERED);
-        try {
-            ndefDetected.addDataType("*/*");// text/plain
-        } catch (IntentFilter.MalformedMimeTypeException e) {
-        }
-
-        IntentFilter td = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
-        IntentFilter ttech = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
-        mNdefExchangeFilters = new IntentFilter[]{ndefDetected, ttech, td};
     }
 
     private BroadcastReceiver mScanReceiver = new BroadcastReceiver() {
@@ -213,203 +175,16 @@ public class ReportActivity extends BaseActivity {
         tvFetchShow.setText("");
     }
 
-    private void resolvIntent(Intent intent) {
-        if (!load) {
-            return;
-        }
-        String action = intent.getAction();
-        //toast(action);
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-            tagFromIntent = getIntent()
-                    .getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            getresult(tagFromIntent);
-//            Parcelable[] rawMsgs = getIntent().getParcelableArrayExtra(
-//                    NfcAdapter.EXTRA_NDEF_MESSAGES);
-//            NdefMessage[] msgs;
-//            if (rawMsgs != null) {
-//                msgs = new NdefMessage[rawMsgs.length];
-//                for (int i = 0; i < rawMsgs.length; i++) {
-//                    msgs[i] = (NdefMessage) rawMsgs[i];
-//                }
-//            } else {
-//                // Unknown tag type
-//                byte[] empty = new byte[]{};
-//                NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN,   //NdefRecord.TNF_UNKNOWN
-//                        empty, empty, empty);
-//                NdefMessage msg = new NdefMessage(new NdefRecord[]{record});
-//                msgs = new NdefMessage[]{msg};
-//            }
-//            setUpWebView(msgs);
-            // dialog(ByteArrayToHexString(msgs[0].getRecords()[0].getPayload()));
-            //	dialog(msgs[0].getRecords()[0].getPayload()));
-        } else if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)) {
-            // 处理该intent
-            tagFromIntent = getIntent()
-                    .getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            getresult(tagFromIntent);
-
-        } else if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)) {
-            types = "Tag";
-            tagFromIntent = getIntent()
-                    .getParcelableExtra(NfcAdapter.EXTRA_TAG);
-            getresult(tagFromIntent);
-        }
-    }
-
-    void getresult(Tag tag) {
-        ArrayList<String> list = new ArrayList<String>();
-        types = "";
-        for (String string : tag.getTechList()) {
-            list.add(string);
-            types += string.substring(string.lastIndexOf(".") + 1, string.length()) + ",";
-        }
-        types = types.substring(0, types.length() - 1);
-        if (list.contains("android.nfc.tech.MifareUltralight")) {
-            String str = readTagUltralight(tag);
-            setNoteBody(str);
-        } else if (list.contains("android.nfc.tech.NfcV")) {//完成
-            NfcV tech = NfcV.get(tag);
-            if (tech != null) {
-                try {
-                    tech.connect();
-                    if (tech.isConnected()) {
-                        NfcVUtil nfcVUtil = new NfcVUtil(tech);
-                        String str = "";
-                        byte[] by = str.getBytes();
-//                        nfcVUtil.writeBlock(5,by);
-                        str = nfcVUtil.readOneBlock(2);
-                        tech.close();
-                        setNoteBody(str);
-                    }
-                } catch (IOException e) {
-
-                }
-            }
-        } else if (list.contains("android.nfc.tech.NdefFormatable")) {
-            NdefMessage[] messages = getNdefMessages(getIntent());
-            byte[] payload = messages[0].getRecords()[0].getPayload();
-            setNoteBody(new String(payload));
-        }
-    }
-
-    NdefMessage[] getNdefMessages(Intent intent) {
-        //读取nfc数据
-        // Parse the intent
-
-        NdefMessage[] msgs = null;
-        String action = intent.getAction();
-        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
-                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            if (rawMsgs != null) {
-                msgs = new NdefMessage[rawMsgs.length];
-                for (int i = 0; i < rawMsgs.length; i++) {
-                    msgs[i] = (NdefMessage) rawMsgs[i];
-                }
-            } else {
-                // Unknown tag type
-                byte[] empty = new byte[]{};
-                NdefRecord record = new NdefRecord(NdefRecord.TNF_UNKNOWN, empty, empty, empty);
-                NdefMessage msg = new NdefMessage(new NdefRecord[]{
-                        record
-                });
-                msgs = new NdefMessage[]{
-                        msg
-                };
-            }
-        } else {
-            finish();
-        }
-        return msgs;
-    }
-
-    public String readTagUltralight(Tag tag) {
-        MifareUltralight mifare = MifareUltralight.get(tag);
-        try {
-            mifare.connect();
-            StringBuffer sb = new StringBuffer();
-            byte[] no10 = new byte[4];  //校验芯片
-            byte[] no11 = new byte[4];  //数据块数量
-
-            byte[] readTag = mifare.readPages(10);
-
-            byte[] readCount = mifare.readPages(11);
-
-            if (readTag.length >= 4) {
-
-                for (int i = 0; i < 4; i++) {
-                    no10[i] = readTag[i];
-                }
-
-                String tagStr = toStringHex(ByteArrayToHexString(no10));
-
-                if (tagStr.equals("YAHN")) {
-                    for (int i = 0; i < 4; i++) {
-                        no11[i] = readCount[i];
-                    }
-
-                    String countStr = toStringHex(ByteArrayToHexString(no11));
-                    int count = Integer.valueOf(countStr.trim());
-
-                    for (int i = 12; i < (count); i++) {
-                        byte[] readResult = mifare.readPages(i);
-                        if (i % 4 == 0) {
-                            if (i == count) {
-                                byte[] codeEnd = new byte[4];
-                                for (int j = 0; j < 4; j++) {
-                                    codeEnd[j] = readResult[j];
-                                }
-                                sb.append(ByteArrayToHexString(codeEnd));
-                            } else {
-                                sb.append(ByteArrayToHexString(readResult));
-                            }
-                        }
-                    }
-                }
-            }
-            //  String  str=toStringHex(sb.toString());
-
-            String finalResult = AESUtils.decryptToString(toStringHex(sb.toString()), "X2Am6tVLnwMMX8kVgdDk5w==");
-//            String finalResult = toStringHex(sb.toString());
-
-            return finalResult;
-
-        } catch (IOException e) {
-//            Log.e(TAG, "IOException while writing MifareUltralight message...", e);
-            return "";
-        } catch (Exception ee) {
-//            Log.e(TAG, "IOException while writing MifareUltralight message...", ee);
-            return "";
-        } finally {
-            if (mifare != null) {
-                try {
-                    mifare.close();
-                } catch (IOException e) {
-//                    Log.e(TAG, "Error closing tag...", e);
-                }
-            }
-        }
-    }
-
-    private void setNoteBody(final String body) {
-
+    @Override
+    public void setNoteBody(final String body) {
+        super.setNoteBody(body);
         if (!TextUtils.isEmpty(body)) {
             tvFetchShow.setText(body);
-            load = false;
+            setLoadState(false);
         } else {
             Toast.makeText(ReportActivity.this, "读取芯片失败", Toast.LENGTH_SHORT).show();
         }
         tvFetch.setBackground(getResources().getDrawable(R.drawable.btn_blue_round));
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        // NDEF exchange mode
-        // 读取uidgetIntent()
-        byte[] myNFCID = intent.getByteArrayExtra(NfcAdapter.EXTRA_ID);
-        ex_id = Converter.getHexString(myNFCID, myNFCID.length);
-        // 读取uidgetIntent()
-        setIntent(intent);
     }
 
     @Override
@@ -427,16 +202,6 @@ public class ReportActivity extends BaseActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(SCAN_ACTION);
         registerReceiver(mScanReceiver, filter);
-
-        if (mNfcAdapter == null || !mNfcAdapter.isEnabled()) {
-            return;
-        }
-
-        //nfc自动读取芯片内容后调用activity的onResume
-        if (mNfcAdapter != null) {
-            mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, null, null);
-            resolvIntent(getIntent());
-        }
     }
 
     @Override
