@@ -52,8 +52,6 @@ public class ManageActivity extends BaseActivity {
 
     private ManageMsgAdapter msgAdapter;
 
-    private ProgersssDialog progersssDialog;
-
     private Gson gson = new Gson();
 
     //加载图标是否显示
@@ -141,7 +139,7 @@ public class ManageActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-                progersssDialog.dismiss();
+                cancelLoadingDialog();
             }
         });
     }
@@ -151,7 +149,7 @@ public class ManageActivity extends BaseActivity {
             Toast.makeText(ManageActivity.this, R.string.msg_get_information_request, Toast.LENGTH_SHORT).show();
             return;
         }
-        progersssDialog = new ProgersssDialog(ManageActivity.this);
+        showLoadingDialog();
         RequestParams requestParams = new RequestParams(updateUrl);
         requestParams.addParameter("json", Base64.encode(msgAdapter.getMsg().getBytes()));
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
@@ -178,7 +176,7 @@ public class ManageActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-                progersssDialog.dismiss();
+                cancelLoadingDialog();
             }
         });
     }
@@ -187,7 +185,7 @@ public class ManageActivity extends BaseActivity {
     public void setNoteBody(String body) {
         super.setNoteBody(body);
         if (!TextUtils.isEmpty(body)) {
-            progersssDialog = new ProgersssDialog(ManageActivity.this);
+            showLoadingDialog();
             getInformation(body);
             setLoadState(false);
         } else {

@@ -49,8 +49,6 @@ public class ReportActivity extends BaseActivity {
 
     private Gson gson = new Gson();
 
-    private ProgersssDialog dialog;
-
     private TextView tvScan, tvAddress, tvFetch, tvFetchShow, tvCommit;
 
     private LinearLayout llBack;
@@ -130,7 +128,7 @@ public class ReportActivity extends BaseActivity {
             return;
         }
 
-        dialog = new ProgersssDialog(this);
+        showLoadingDialog();
 
         RequestParams requestParams = new RequestParams(url);
         if (!TextUtils.isEmpty(chipId)) {
@@ -148,7 +146,7 @@ public class ReportActivity extends BaseActivity {
                 if (reportBean != null && reportBean.isResult()) {
                     clearData();
                     Toast.makeText(ReportActivity.this, R.string.report_success, Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Toast.makeText(ReportActivity.this, R.string.report_fail, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -165,7 +163,7 @@ public class ReportActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-                dialog.dismiss();
+                cancelLoadingDialog();
             }
         });
     }

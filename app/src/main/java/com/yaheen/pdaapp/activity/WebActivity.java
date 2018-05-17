@@ -26,8 +26,6 @@ import com.yaheen.pdaapp.widget.X5WebView;
 
 public class WebActivity extends BaseActivity {
 
-    //    private WebView web_content;
-
     private ViewGroup mViewParent;
 
     private X5WebView mWebView;
@@ -47,6 +45,7 @@ public class WebActivity extends BaseActivity {
         shortCode = getIntent().getStringExtra("shortCode");
 
         init();
+        showLoadingDialog();
 
         if (!TextUtils.isEmpty(shortCode)) {
             shortCode = shortCode.substring(shortCode.lastIndexOf("/") + 1);
@@ -136,6 +135,9 @@ public class WebActivity extends BaseActivity {
 
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
+            if (newProgress == 100) {
+                cancelLoadingDialog();
+            }
         }
 
         @Override
@@ -143,5 +145,6 @@ public class WebActivity extends BaseActivity {
             geolocationPermissionsCallback.invoke(s, true, true);
             super.onGeolocationPermissionsShowPrompt(s, geolocationPermissionsCallback);
         }
+
     };
 }

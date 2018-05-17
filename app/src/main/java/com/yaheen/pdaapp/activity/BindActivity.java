@@ -46,8 +46,6 @@ public class BindActivity extends BaseActivity {
 
     private Gson gson = new Gson();
 
-    private ProgersssDialog dialog;
-
     private TextView tvFetch, tvFetchShow, tvScan, tvScanShow, tvCommit;
 
     private LinearLayout llBack;
@@ -93,7 +91,7 @@ public class BindActivity extends BaseActivity {
         tvCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dialog = new ProgersssDialog(BindActivity.this);
+                showLoadingDialog();
                 bind();
             }
         });
@@ -146,7 +144,7 @@ public class BindActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-                dialog.dismiss();
+                cancelLoadingDialog();
             }
         });
     }

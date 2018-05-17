@@ -41,6 +41,8 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
     private PendingIntent mNfcPendingIntent;
     private IntentFilter[] mNdefExchangeFilters;
 
+    private ProgersssDialog progersssDialog;
+
     private String ex_id = "", types = "";
 
     private TextView tvContent;
@@ -94,7 +96,17 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
         mNdefExchangeFilters = new IntentFilter[]{ndefDetected, ttech, td};
     }
 
-    protected void setLoadState(boolean load){
+    public void showLoadingDialog() {
+        progersssDialog = new ProgersssDialog(BaseActivity.this);
+    }
+
+    public void cancelLoadingDialog() {
+        if (progersssDialog != null) {
+            progersssDialog.dismiss();
+        }
+    }
+
+    protected void setLoadState(boolean load) {
         this.load = load;
     }
 
@@ -257,18 +269,6 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
         }
     }
 
-//    private void setNoteBody(final String body) {
-//
-//        if (!TextUtils.isEmpty(body)) {
-//            load = false;
-////            progersssDialog = new ProgersssDialog(ManageActivity.this);
-////            getInformation(body);
-//        } else {
-//            Toast.makeText(BaseActivity.this, "读取芯片失败", Toast.LENGTH_SHORT).show();
-//        }
-////        tvLoad.setBackground(getResources().getDrawable(R.drawable.btn_blue_round));
-//    }
-//
     @Override
     public void setNoteBody(String body) {
 

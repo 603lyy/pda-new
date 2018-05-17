@@ -21,10 +21,6 @@ public class MainActivity extends BaseActivity {
 
     private final static String SCAN_ACTION = "scan.rcv.message";
 
-    private ScanDevice sm;
-
-    private TextView tvBind, tvMsg, tvManage, tvReport;
-
     private LinearLayout llBind, llMsg, llManage, llReport;
 
     private String barcodeStr;
@@ -35,7 +31,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
 
         llMsg = findViewById(R.id.ll_msg);
-        tvBind = findViewById(R.id.tv_bind);
         llBind = findViewById(R.id.ll_bind);
         llReport = findViewById(R.id.ll_report);
         llManage = findViewById(R.id.ll_manage);
@@ -51,7 +46,7 @@ public class MainActivity extends BaseActivity {
         llManage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,ManageActivity.class);
+                Intent intent = new Intent(MainActivity.this, ManageActivity.class);
                 startActivity(intent);
             }
         });
@@ -59,7 +54,7 @@ public class MainActivity extends BaseActivity {
         llMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, R.string.main_activity_scan,Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.main_activity_scan, Toast.LENGTH_SHORT).show();
                 scanUtils.start();
             }
         });
@@ -67,7 +62,7 @@ public class MainActivity extends BaseActivity {
         llReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this,ReportActivity.class);
+                Intent intent = new Intent(MainActivity.this, ReportActivity.class);
                 startActivity(intent);
             }
         });
@@ -86,9 +81,9 @@ public class MainActivity extends BaseActivity {
 
     };
 
-    private void startWebActivity(String code){
-        Intent intent = new Intent(MainActivity.this,WebActivity.class);
-        intent.putExtra("shortCode",code);
+    private void startWebActivity(String code) {
+        Intent intent = new Intent(MainActivity.this, WebActivity.class);
+        intent.putExtra("shortCode", code);
         startActivity(intent);
     }
 
