@@ -158,8 +158,18 @@ public class ReportActivity extends BaseActivity {
     };
 
     private void commit() {
+        String chipId = tvFetchShow.getText().toString();
+        String shortLinkCode = tvAddress.getText().toString();
+        if(TextUtils.isEmpty(chipId)&&TextUtils.isEmpty(shortLinkCode)){
+            Toast.makeText(this, R.string.report_empty_toast,Toast.LENGTH_SHORT).show();
+        }
         RequestParams requestParams = new RequestParams(url);
-        requestParams.addParameter("chipId", "123456");
+        if(!TextUtils.isEmpty(chipId)){
+            requestParams.addParameter("chipId", chipId);
+        }
+        if(!TextUtils.isEmpty(shortLinkCode)){
+            requestParams.addParameter("shortLinkCode", shortLinkCode);
+        }
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override
