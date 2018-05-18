@@ -140,13 +140,13 @@ public class NfcVUtil {
      * @return false为写入失败，true为写入成功
      * @throws IOException
      */
-    public boolean writeBlock(int position, byte[] data) throws IOException{
+    public boolean writeBlock(byte position, byte[] data) throws IOException{
         byte cmd[] = new byte[15];
         cmd[0] = (byte) 0x22;
         cmd[1] = (byte) 0x21;
         System.arraycopy(ID, 0, cmd, 2, ID.length); // UID
-        // block
-        cmd[10] = (byte) 0x04;
+        // 数据编写入的位置
+        cmd[10] = position;
         //value
         System.arraycopy(data, 0, cmd, 11, data.length);
         byte[]rsp = mNfcV.transceive(cmd);

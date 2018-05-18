@@ -125,12 +125,14 @@ public class ManageActivity extends BaseActivity {
                     beanList.add(msgBean.getEntity());
                     msgAdapter.setDatas(beanList);
                     msgAdapter.notifyDataSetChanged();
+                }else {
+                    showToast(R.string.msg_get_information_fail);
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-
+                showToast(R.string.msg_get_information_fail);
             }
 
             @Override

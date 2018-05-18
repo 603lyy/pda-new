@@ -159,9 +159,21 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
                     tech.connect();
                     if (tech.isConnected()) {
                         NfcVUtil nfcVUtil = new NfcVUtil(tech);
+
+                        //写芯片数据
                         String str = "";
-                        byte[] by = str.getBytes();
-//                        nfcVUtil.writeBlock(5,by);
+//                        byte[] by = str.getBytes();
+//                        nfcVUtil.writeBlock((byte) 0x01,by);
+//                        str="0";
+//                        by= str.getBytes();
+//                        nfcVUtil.writeBlock((byte) 0x02,by);
+//                        str="0";
+//                        by= str.getBytes();
+//                        nfcVUtil.writeBlock((byte) 0x03,by);
+//                        str="3";
+//                        by= str.getBytes();
+//                        nfcVUtil.writeBlock((byte) 0x04,by);
+
                         str = nfcVUtil.readBlocks(0, 27);
                         tech.close();
                         setNoteBody(str);
