@@ -20,7 +20,7 @@ public class MsgBean implements Serializable {
     private EntityBean entity;
 
     //实体类变量的个数
-    public static int num = 9;
+    public static int num = 20;
 
     public boolean isResult() {
         return result;
@@ -60,6 +60,154 @@ public class MsgBean implements Serializable {
         private String peopleNumber;
         private String category;
         private String partyMember;
+        private String gloriousArmy;
+        private String fiveGuarantees;
+        private String beekeepingProfessionals;
+        private String fireInspectionPoint;
+        private String gridInspectionPoint;
+        private String breedingSpecialist;
+        private String technologyDemonstration;
+        private String precisionPoverty;
+        private String civilizationHouseholds;
+        private String helper;
+        private String agriculturalProductsInformation;
+
+        public String getGloriousArmy() {
+            if (!TextUtils.isEmpty(gloriousArmy)) {
+                if (gloriousArmy.equals("Y")) {
+                    return "是";
+                } else if (gloriousArmy.equals("F")) {
+                    return "否";
+                }
+            }
+            return gloriousArmy;
+        }
+
+        public void setGloriousArmy(String gloriousArmy) {
+            this.gloriousArmy = gloriousArmy;
+        }
+
+        public String getFiveGuarantees() {
+            if (!TextUtils.isEmpty(fiveGuarantees)) {
+                if (fiveGuarantees.equals("Y")) {
+                    return "是";
+                } else if (fiveGuarantees.equals("F")) {
+                    return "否";
+                }
+            }
+            return fiveGuarantees;
+        }
+
+        public void setFiveGuarantees(String fiveGuarantees) {
+            this.fiveGuarantees = fiveGuarantees;
+        }
+
+        public String getBeekeepingProfessionals() {
+            if (!TextUtils.isEmpty(beekeepingProfessionals)) {
+                if (beekeepingProfessionals.equals("Y")) {
+                    return "是";
+                } else if (beekeepingProfessionals.equals("F")) {
+                    return "否";
+                }
+            }
+            return beekeepingProfessionals;
+        }
+
+        public void setBeekeepingProfessionals(String beekeepingProfessionals) {
+            this.beekeepingProfessionals = beekeepingProfessionals;
+        }
+
+        public String getFireInspectionPoint() {
+            return fireInspectionPoint;
+        }
+
+        public void setFireInspectionPoint(String fireInspectionPoint) {
+            this.fireInspectionPoint = fireInspectionPoint;
+        }
+
+        public String getGridInspectionPoint() {
+            return gridInspectionPoint;
+        }
+
+        public void setGridInspectionPoint(String gridInspectionPoint) {
+            this.gridInspectionPoint = gridInspectionPoint;
+        }
+
+        public String getBreedingSpecialist() {
+            if (!TextUtils.isEmpty(breedingSpecialist)) {
+                if (breedingSpecialist.equals("Y")) {
+                    return "是";
+                } else if (breedingSpecialist.equals("F")) {
+                    return "否";
+                }
+            }
+            return breedingSpecialist;
+        }
+
+        public void setBreedingSpecialist(String breedingSpecialist) {
+            this.breedingSpecialist = breedingSpecialist;
+        }
+
+        public String getTechnologyDemonstration() {
+            if (!TextUtils.isEmpty(technologyDemonstration)) {
+                if (technologyDemonstration.equals("Y")) {
+                    return "是";
+                } else if (technologyDemonstration.equals("F")) {
+                    return "否";
+                }
+            }
+            return technologyDemonstration;
+        }
+
+        public void setTechnologyDemonstration(String technologyDemonstration) {
+            this.technologyDemonstration = technologyDemonstration;
+        }
+
+        public String getPrecisionPoverty() {
+            if (!TextUtils.isEmpty(precisionPoverty)) {
+                if (precisionPoverty.equals("Y")) {
+                    return "是";
+                } else if (precisionPoverty.equals("F")) {
+                    return "否";
+                }
+            }
+            return precisionPoverty;
+        }
+
+        public void setPrecisionPoverty(String precisionPoverty) {
+            this.precisionPoverty = precisionPoverty;
+        }
+
+        public String getCivilizationHouseholds() {
+            if (!TextUtils.isEmpty(civilizationHouseholds)) {
+                if (civilizationHouseholds.equals("Y")) {
+                    return "是";
+                } else if (civilizationHouseholds.equals("F")) {
+                    return "否";
+                }
+            }
+            return civilizationHouseholds;
+        }
+
+        public void setCivilizationHouseholds(String civilizationHouseholds) {
+            this.civilizationHouseholds = civilizationHouseholds;
+        }
+
+        public String getHelper() {
+            return helper;
+        }
+
+        public void setHelper(String helper) {
+            this.helper = helper;
+        }
+
+        public String getAgriculturalProductsInformation() {
+            return agriculturalProductsInformation;
+        }
+
+        public void setAgriculturalProductsInformation(String agriculturalProductsInformation) {
+            this.agriculturalProductsInformation = agriculturalProductsInformation;
+        }
 
         public String getId() {
             return id;
@@ -158,13 +306,13 @@ public class MsgBean implements Serializable {
         public String getCategory() {
             if (!TextUtils.isEmpty(category)) {
                 if (category.equals("S")) {
-                    return "私用";
+                    return "户主";
                 } else if (category.equals("G")) {
-                    return "公用";
+                    return "村委";
                 } else if (category.equals("B")) {
-                    return "商用";
+                    return "商旅";
                 } else if (category.equals("M")) {
-                    return "民宿";
+                    return "导视牌";
                 }
             }
             return category;

@@ -3,7 +3,10 @@ package com.yaheen.pdaapp.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Build;
@@ -13,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.widget.FrameLayout;
 
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
@@ -22,9 +26,12 @@ import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.yaheen.pdaapp.R;
+import com.yaheen.pdaapp.widget.WebJavaScriptProvider;
 import com.yaheen.pdaapp.widget.X5WebView;
 
 public class WebActivity extends BaseActivity {
+
+    private final static String SCAN_ACTION = "scan.rcv.message";
 
     private ViewGroup mViewParent;
 
@@ -32,7 +39,13 @@ public class WebActivity extends BaseActivity {
 
     private String url = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do?shortLinkCode=";
 
-    private String shortCode;
+    private String baseUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do";
+
+    private String shortCode = "";
+
+    private String type = "mark=";
+
+    private String typeStr = "a";
 
     @SuppressLint("JavascriptInterface")
     @Override
@@ -42,20 +55,28 @@ public class WebActivity extends BaseActivity {
 
         mViewParent = (ViewGroup) findViewById(R.id.web_parent);
 
-        shortCode = getIntent().getStringExtra("shortCode");
+//        shortCode = getIntent().getStringExtra("shortCode");
 
         init();
         showLoadingDialog();
 
-        if (!TextUtils.isEmpty(shortCode)) {
-            shortCode = shortCode.substring(shortCode.lastIndexOf("/") + 1);
-            loadUrl();
-        }
+//        if (!TextUtils.isEmpty(shortCode)) {
+//            shortCode = shortCode.substring(shortCode.lastIndexOf("/") + 1);
+//            loadUrl();
+//        }
+
+        loadUrl();
     }
 
     private void loadUrl() {
 //        mWebView.loadUrl("file:///android_asset/web.html");
-        mWebView.loadUrl(url + shortCode);
+        shortCode = shortCode.substring(shortCode.lastIndexOf("/") + 1);
+        if (!TextUtils.isEmpty(shortCode)) {
+            mWebView.loadUrl(url + shortCode + "&" + type + typeStr);
+        } else {
+            mWebView.loadUrl(baseUrl + "?" + type + typeStr);
+//        mWebView.loadUrl("file:///android_asset/web.html");
+        }
     }
 
     private void init() {
@@ -123,7 +144,43 @@ public class WebActivity extends BaseActivity {
 
         CookieSyncManager.createInstance(this);
         CookieSyncManager.getInstance().sync();
+
+        mWebView.addJavascriptInterface(new FetchProvider(this, this), "android");
     }
+
+    class FetchProvider extends WebJavaScriptProvider {
+
+        public FetchProvider(Context ctx, BaseActivity activity) {
+            super(ctx, activity);
+        }
+
+        @JavascriptInterface
+        public void openFetch(String mark) {
+            scanUtils.start();
+            typeStr = mark;
+            showLoadingDialog();
+        }
+
+        @JavascriptInterface
+        public void back() {
+            finish();
+        }
+
+    }
+
+    private BroadcastReceiver mScanReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // TODO Auto-generated method stub
+            byte[] barocode = intent.getByteArrayExtra("barocode");
+            int barocodelen = intent.getIntExtra("length", 0);
+            shortCode = new String(barocode, 0, barocodelen);
+            scanUtils.stop();
+            loadUrl();
+        }
+
+    };
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -152,4 +209,21 @@ public class WebActivity extends BaseActivity {
         }
 
     };
+
+    @Override
+    protected void onPause() {
+        // TODO Auto-generated method stub
+        super.onPause();
+        scanUtils.stop();
+        unregisterReceiver(mScanReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        // TODO Auto-generated method stub
+        super.onResume();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(SCAN_ACTION);
+        registerReceiver(mScanReceiver, filter);
+    }
 }

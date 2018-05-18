@@ -52,6 +52,9 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
 
     private ToastUtils toastUtils = new ToastUtils();
 
+    //网页按钮标记
+    protected String typeStr = "";
+
     //是否可以读芯片
     private boolean load = false;
 
@@ -64,6 +67,11 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
 
     private void init() {
         scanUtils = new ScanUtils();
+    }
+
+    public void openFetch(String mark){
+        scanUtils.start();
+        showToast(R.string.main_activity_scan);
     }
 
     protected void setTitleContent(int content) {

@@ -15,6 +15,7 @@ import android.os.Parcelable;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -77,6 +78,36 @@ public class ManageActivity extends BaseActivity {
 
         msgAdapter = new ManageMsgAdapter(this);
         listView.setAdapter(msgAdapter);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                switch (scrollState) {
+                    case SCROLL_STATE_TOUCH_SCROLL:
+                        msgAdapter.setScrolling(true);
+                        break;
+                    case SCROLL_STATE_FLING:
+                        break;
+                    case SCROLL_STATE_IDLE:
+                        msgAdapter.setScrolling(false);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+
+            }
+        });
+        listView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+                if (!msgAdapter.getChangeState()) {
+                    msgAdapter.setChangeState(true);
+                }
+            }
+        });
 
         initLocalMsg();
 
@@ -125,7 +156,7 @@ public class ManageActivity extends BaseActivity {
                     beanList.add(msgBean.getEntity());
                     msgAdapter.setDatas(beanList);
                     msgAdapter.notifyDataSetChanged();
-                }else {
+                } else {
                     showToast(R.string.msg_get_information_fail);
                 }
             }

@@ -54,8 +54,9 @@ public class MainActivity extends BaseActivity {
         llMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast(R.string.main_activity_scan);
-                scanUtils.start();
+//                showToast(R.string.main_activity_scan);
+//                scanUtils.start();
+            startWebActivity(barcodeStr);
             }
         });
 
@@ -76,7 +77,7 @@ public class MainActivity extends BaseActivity {
             int barocodelen = intent.getIntExtra("length", 0);
             barcodeStr = new String(barocode, 0, barocodelen);
             scanUtils.stop();
-            startWebActivity(barcodeStr);
+//            startWebActivity(barcodeStr);
         }
 
     };
