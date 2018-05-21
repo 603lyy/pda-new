@@ -55,16 +55,8 @@ public class WebActivity extends BaseActivity {
 
         mViewParent = (ViewGroup) findViewById(R.id.web_parent);
 
-//        shortCode = getIntent().getStringExtra("shortCode");
-
         init();
         showLoadingDialog();
-
-//        if (!TextUtils.isEmpty(shortCode)) {
-//            shortCode = shortCode.substring(shortCode.lastIndexOf("/") + 1);
-//            loadUrl();
-//        }
-
         loadUrl();
     }
 
@@ -75,7 +67,6 @@ public class WebActivity extends BaseActivity {
             mWebView.loadUrl(url + shortCode + "&" + type + typeStr);
         } else {
             mWebView.loadUrl(baseUrl + "?" + type + typeStr);
-//        mWebView.loadUrl("file:///android_asset/web.html");
         }
     }
 

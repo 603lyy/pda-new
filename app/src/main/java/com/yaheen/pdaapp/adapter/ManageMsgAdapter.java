@@ -1,5 +1,6 @@
 package com.yaheen.pdaapp.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -43,6 +44,7 @@ public class ManageMsgAdapter extends CommonAdapter<MsgBean.EntityBean> {
         return MsgBean.num;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View getView(final int position, View convertView, ViewGroup viewGroup) {
         final ViewHolder holder;
@@ -120,50 +122,55 @@ public class ManageMsgAdapter extends CommonAdapter<MsgBean.EntityBean> {
             holder.etDetail.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    if (position == 0) {
-                        String str[] = {"行政村", "自然村"};
-                        showCheckDialog(position, R.string.msg_community_text, str);
-                        return true;
-                    } else if (position == 2) {
-                        String str[] = {"男", "女"};
-                        showCheckDialog(position, R.string.msg_sex_text, str);
-                        return true;
-                    } else if (position == 7) {
-                        String str[] = {"户主", "村委", "商旅", "导视牌"};
-                        showCheckDialog(position, R.string.msg_category_text, str);
-                        return true;
-                    } else if (position == 8) {
-                        String str[] = {"是", "否"};
-                        showCheckDialog(position, R.string.msg_party_member_text, str);
-                        return true;
-                    } else if (position == 9) {
-                        String str[] = {"是", "否"};
-                        showCheckDialog(position, R.string.msg_gloriousArmy_text, str);
-                        return true;
-                    } else if (position == 10) {
-                        String str[] = {"是", "否"};
-                        showCheckDialog(position, R.string.msg_fiveGuarantees_text, str);
-                        return true;
-                    } else if (position == 11) {
-                        String str[] = {"是", "否"};
-                        showCheckDialog(position, R.string.msg_beekeepingProfessionals_text, str);
-                        return true;
-                    } else if (position == 14) {
-                        String str[] = {"是", "否"};
-                        showCheckDialog(position, R.string.msg_breedingSpecialist_text, str);
-                        return true;
-                    } else if (position == 15) {
-                        String str[] = {"是", "否"};
-                        showCheckDialog(position, R.string.msg_technologyDemonstration_text, str);
-                        return true;
-                    } else if (position == 16) {
-                        String str[] = {"是", "否"};
-                        showCheckDialog(position, R.string.msg_precisionPoverty_text, str);
-                        return true;
-                    } else if (position == 17) {
-                        String str[] = {"是", "否"};
-                        showCheckDialog(position, R.string.msg_civilizationHouseholds_text, str);
-                        return true;
+                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        if (isScrolling) {
+                            return false;
+                        }
+                        if (position == 0) {
+                            String str[] = {"行政村", "自然村"};
+                            showCheckDialog(position, R.string.msg_community_text, str);
+                            return true;
+                        } else if (position == 2) {
+                            String str[] = {"男", "女"};
+                            showCheckDialog(position, R.string.msg_sex_text, str);
+                            return true;
+                        } else if (position == 7) {
+                            String str[] = {"户主", "村委", "商旅", "导视牌"};
+                            showCheckDialog(position, R.string.msg_category_text, str);
+                            return true;
+                        } else if (position == 8) {
+                            String str[] = {"是", "否"};
+                            showCheckDialog(position, R.string.msg_party_member_text, str);
+                            return true;
+                        } else if (position == 9) {
+                            String str[] = {"是", "否"};
+                            showCheckDialog(position, R.string.msg_gloriousArmy_text, str);
+                            return true;
+                        } else if (position == 10) {
+                            String str[] = {"是", "否"};
+                            showCheckDialog(position, R.string.msg_fiveGuarantees_text, str);
+                            return true;
+                        } else if (position == 11) {
+                            String str[] = {"是", "否"};
+                            showCheckDialog(position, R.string.msg_beekeepingProfessionals_text, str);
+                            return true;
+                        } else if (position == 14) {
+                            String str[] = {"是", "否"};
+                            showCheckDialog(position, R.string.msg_breedingSpecialist_text, str);
+                            return true;
+                        } else if (position == 15) {
+                            String str[] = {"是", "否"};
+                            showCheckDialog(position, R.string.msg_technologyDemonstration_text, str);
+                            return true;
+                        } else if (position == 16) {
+                            String str[] = {"是", "否"};
+                            showCheckDialog(position, R.string.msg_precisionPoverty_text, str);
+                            return true;
+                        } else if (position == 17) {
+                            String str[] = {"是", "否"};
+                            showCheckDialog(position, R.string.msg_civilizationHouseholds_text, str);
+                            return true;
+                        }
                     }
 
                     touchPosition = position;
@@ -188,7 +195,7 @@ public class ManageMsgAdapter extends CommonAdapter<MsgBean.EntityBean> {
                         return;
                     }
 
-                    if(touchPosition!=position){
+                    if (touchPosition != position) {
                         return;
                     }
 

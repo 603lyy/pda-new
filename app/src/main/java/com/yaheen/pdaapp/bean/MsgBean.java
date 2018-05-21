@@ -73,14 +73,7 @@ public class MsgBean implements Serializable {
         private String agriculturalProductsInformation;
 
         public String getGloriousArmy() {
-            if (!TextUtils.isEmpty(gloriousArmy)) {
-                if (gloriousArmy.equals("Y")) {
-                    return "是";
-                } else if (gloriousArmy.equals("F")) {
-                    return "否";
-                }
-            }
-            return gloriousArmy;
+            return changeText(gloriousArmy);
         }
 
         public void setGloriousArmy(String gloriousArmy) {
@@ -88,14 +81,7 @@ public class MsgBean implements Serializable {
         }
 
         public String getFiveGuarantees() {
-            if (!TextUtils.isEmpty(fiveGuarantees)) {
-                if (fiveGuarantees.equals("Y")) {
-                    return "是";
-                } else if (fiveGuarantees.equals("F")) {
-                    return "否";
-                }
-            }
-            return fiveGuarantees;
+            return changeText(fiveGuarantees);
         }
 
         public void setFiveGuarantees(String fiveGuarantees) {
@@ -103,14 +89,7 @@ public class MsgBean implements Serializable {
         }
 
         public String getBeekeepingProfessionals() {
-            if (!TextUtils.isEmpty(beekeepingProfessionals)) {
-                if (beekeepingProfessionals.equals("Y")) {
-                    return "是";
-                } else if (beekeepingProfessionals.equals("F")) {
-                    return "否";
-                }
-            }
-            return beekeepingProfessionals;
+            return changeText(beekeepingProfessionals);
         }
 
         public void setBeekeepingProfessionals(String beekeepingProfessionals) {
@@ -134,14 +113,7 @@ public class MsgBean implements Serializable {
         }
 
         public String getBreedingSpecialist() {
-            if (!TextUtils.isEmpty(breedingSpecialist)) {
-                if (breedingSpecialist.equals("Y")) {
-                    return "是";
-                } else if (breedingSpecialist.equals("F")) {
-                    return "否";
-                }
-            }
-            return breedingSpecialist;
+            return changeText(breedingSpecialist);
         }
 
         public void setBreedingSpecialist(String breedingSpecialist) {
@@ -149,14 +121,7 @@ public class MsgBean implements Serializable {
         }
 
         public String getTechnologyDemonstration() {
-            if (!TextUtils.isEmpty(technologyDemonstration)) {
-                if (technologyDemonstration.equals("Y")) {
-                    return "是";
-                } else if (technologyDemonstration.equals("F")) {
-                    return "否";
-                }
-            }
-            return technologyDemonstration;
+            return changeText(technologyDemonstration);
         }
 
         public void setTechnologyDemonstration(String technologyDemonstration) {
@@ -164,14 +129,7 @@ public class MsgBean implements Serializable {
         }
 
         public String getPrecisionPoverty() {
-            if (!TextUtils.isEmpty(precisionPoverty)) {
-                if (precisionPoverty.equals("Y")) {
-                    return "是";
-                } else if (precisionPoverty.equals("F")) {
-                    return "否";
-                }
-            }
-            return precisionPoverty;
+            return changeText(precisionPoverty);
         }
 
         public void setPrecisionPoverty(String precisionPoverty) {
@@ -179,14 +137,7 @@ public class MsgBean implements Serializable {
         }
 
         public String getCivilizationHouseholds() {
-            if (!TextUtils.isEmpty(civilizationHouseholds)) {
-                if (civilizationHouseholds.equals("Y")) {
-                    return "是";
-                } else if (civilizationHouseholds.equals("F")) {
-                    return "否";
-                }
-            }
-            return civilizationHouseholds;
+            return changeText(civilizationHouseholds);
         }
 
         public void setCivilizationHouseholds(String civilizationHouseholds) {
@@ -323,19 +274,23 @@ public class MsgBean implements Serializable {
         }
 
         public String getPartyMember() {
-            if (!TextUtils.isEmpty(partyMember)) {
-                if (partyMember.equals("Y")) {
-                    return "是";
-                } else if (partyMember.equals("F")) {
-                    return "否";
-                }
-            }
-            return partyMember;
+            return changeText(partyMember);
         }
 
         public void setPartyMember(String partyMember) {
             this.partyMember = partyMember;
         }
 
+    }
+
+    public static String changeText(String s){
+        if (!TextUtils.isEmpty(s)) {
+            if (s.equals("Y")) {
+                return "是";
+            } else if (s.equals("F")) {
+                return "否";
+            }
+        }
+        return s;
     }
 }
