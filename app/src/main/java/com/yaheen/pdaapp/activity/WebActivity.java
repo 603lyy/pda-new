@@ -37,9 +37,14 @@ public class WebActivity extends BaseActivity {
 
     private X5WebView mWebView;
 
-    private String url = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do?shortLinkCode=";
+    private String url = "https://lhhk.020szsq.com/tool/toEntryMatch.do?shortLinkCode=";
 
-    private String baseUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do";
+    private String baseUrl = "https://lhhk.020szsq.com/tool/toEntryMatch.do";
+
+//    测试URL
+//    private String url = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do?shortLinkCode=";
+//
+//    private String baseUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do";
 
     private String shortCode = "";
 

@@ -55,7 +55,9 @@ public class ReportActivity extends BaseActivity {
 
     private String barcodeStr;
 
-    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/tool/reportByApp.do";
+//    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/tool/reportByApp.do";
+
+    private String url = "https://lhhk.020szsq.com/tool/reportByApp.do";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

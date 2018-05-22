@@ -59,9 +59,13 @@ public class ManageActivity extends BaseActivity {
     //加载图标是否显示
     private boolean isLoading = false;
 
-    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/houseNumberRelation/getAllHouseNumberByChip.do";
+    private String url = "https://lhhk.020szsq.com/houseNumberRelation/getAllHouseNumberByChip.do";
 
-    private String updateUrl = "http://lyl.tunnel.echomod.cn/whnsubhekou/houseNumberRelation/updateAppByJson.do";
+    private String updateUrl = "https://lhhk.020szsq.com/houseNumberRelation/updateAppByJson.do";
+
+//    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/houseNumberRelation/getAllHouseNumberByChip.do";
+//
+//    private String updateUrl = "http://lyl.tunnel.echomod.cn/whnsubhekou/houseNumberRelation/updateAppByJson.do";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
