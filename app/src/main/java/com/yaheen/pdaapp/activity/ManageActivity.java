@@ -155,7 +155,7 @@ public class ManageActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 MsgBean msgBean = gson.fromJson(result, MsgBean.class);
-                if (msgBean != null) {
+                if (msgBean != null && msgBean.getEntity() != null) {
                     List<MsgBean.EntityBean> beanList = new ArrayList<>();
                     beanList.add(msgBean.getEntity());
                     msgAdapter.setDatas(beanList);

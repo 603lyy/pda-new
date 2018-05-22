@@ -169,24 +169,24 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
                         NfcVUtil nfcVUtil = new NfcVUtil(tech);
 
                         //写芯片数据
-                        String str = "";
-//                        byte[] by = str.getBytes();
-//                        nfcVUtil.writeBlock((byte) 0x01,by);
-//                        str="5";
-//                        by= str.getBytes();
-//                        nfcVUtil.writeBlock((byte) 0x02,by);
-//                        str="2";
-//                        by= str.getBytes();
-//                        nfcVUtil.writeBlock((byte) 0x03,by);
-//                        str="1";
-//                        by= str.getBytes();
-//                        nfcVUtil.writeBlock((byte) 0x04,by);
-//                        str="0";
-//                        by= str.getBytes();
-//                        nfcVUtil.writeBlock((byte) 0x05,by);
-//                        str="5";
-//                        by= str.getBytes();
-//                        nfcVUtil.writeBlock((byte) 0x06,by);
+                        String str = "0";
+                        byte[] by = str.getBytes();
+                        nfcVUtil.writeBlock((byte) 0x01,by);
+                        str="5";
+                        by= str.getBytes();
+                        nfcVUtil.writeBlock((byte) 0x02,by);
+                        str="2";
+                        by= str.getBytes();
+                        nfcVUtil.writeBlock((byte) 0x03,by);
+                        str="1";
+                        by= str.getBytes();
+                        nfcVUtil.writeBlock((byte) 0x04,by);
+                        str="0";
+                        by= str.getBytes();
+                        nfcVUtil.writeBlock((byte) 0x05,by);
+                        str="1";
+                        by= str.getBytes();
+                        nfcVUtil.writeBlock((byte) 0x06,by);
 
                         str = nfcVUtil.readBlocks(0, 27);
                         tech.close();

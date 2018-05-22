@@ -5,6 +5,7 @@
     <string name="title_bar_msg_text">门牌信息</string>
     <string name="btn_commit_text">提交</string>
     <string name="fetch_chip_fail">读取芯片失败</string>
+    <string name="scan_success">扫描成功</string>
 
     <string name="main_activity_scan">请先扫描门牌二维码</string>
 

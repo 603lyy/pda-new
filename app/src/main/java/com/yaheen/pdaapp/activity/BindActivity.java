@@ -106,18 +106,20 @@ public class BindActivity extends BaseActivity {
 
         if (TextUtils.isEmpty(slink)) {
             showToast(R.string.bind_activity_short_link_empty);
+            cancelLoadingDialog();
             return;
         }
 
         if (TextUtils.isEmpty(chip)) {
             showToast(R.string.bind_activity_chip_empty);
+            cancelLoadingDialog();
             return;
         }
 
         RequestParams params = new RequestParams(url);
         params.addQueryStringParameter("key", "7zbQUBNY0XkEcUoushaJD7UcKyWkc91q");
-        params.addQueryStringParameter("shortLinkCode", "9SzulHE");
-        params.addQueryStringParameter("note", "1817");
+        params.addQueryStringParameter("shortLinkCode", barcodeStr);
+        params.addQueryStringParameter("note", tvFetchShow.getText().toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

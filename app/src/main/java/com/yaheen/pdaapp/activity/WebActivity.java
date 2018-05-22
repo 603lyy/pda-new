@@ -172,6 +172,7 @@ public class WebActivity extends BaseActivity {
             byte[] barocode = intent.getByteArrayExtra("barocode");
             int barocodelen = intent.getIntExtra("length", 0);
             shortCode = new String(barocode, 0, barocodelen);
+            showToast(R.string.scan_success);
             scanUtils.stop();
             loadUrl();
         }

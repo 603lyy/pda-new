@@ -134,11 +134,11 @@ public class ReportActivity extends BaseActivity {
 
         RequestParams requestParams = new RequestParams(url);
         if (!TextUtils.isEmpty(chipId)) {
-            requestParams.addParameter("chipId", chipId);
+            requestParams.addQueryStringParameter("chipId", chipId);
         }
         if (!TextUtils.isEmpty(shortLinkCode)) {
             shortLinkCode = shortLinkCode.substring(shortLinkCode.lastIndexOf("/") + 1);
-            requestParams.addParameter("shortLinkCode", shortLinkCode);
+            requestParams.addQueryStringParameter("shortLinkCode", shortLinkCode);
         }
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
