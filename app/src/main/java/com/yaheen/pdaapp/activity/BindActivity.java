@@ -58,6 +58,7 @@ public class BindActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bind);
+        setTitleContent(R.string.bind_activity_title_content);
 
         llBack = findViewById(R.id.back);
         tvScan = findViewById(R.id.tv_scan);
