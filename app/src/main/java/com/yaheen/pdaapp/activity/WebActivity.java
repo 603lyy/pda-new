@@ -209,7 +209,7 @@ public class WebActivity extends BaseActivity {
                         showToast(R.string.scan_success);
                         loadUrl();
                     }else {
-                        showToast(R.string.bind_activity_short_link_bind);
+                        showToast(R.string.web_activity_short_link_used);
                         cancelLoadingDialog();
                     }
                 } else {

@@ -22,6 +22,7 @@
     <string name="bind_activity_bind_success">绑定成功</string>
     <string name="bind_activity_bind_fail">绑定失败</string>
     <string name="bind_activity_short_link_bind">该短链接已绑定门牌</string>
+    <string name="web_activity_short_link_used">该短链接已被使用</string>
 
     <string name="msg_sex_text">性别：</string>
     <string name="msg_id_text">门牌号：</string>
