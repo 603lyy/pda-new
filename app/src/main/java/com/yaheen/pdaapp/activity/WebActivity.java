@@ -164,7 +164,6 @@ public class WebActivity extends BaseActivity {
         public void openFetch(String mark) {
             scanUtils.start();
             typeStr = mark;
-            showLoadingDialog();
         }
 
         @JavascriptInterface
@@ -182,6 +181,7 @@ public class WebActivity extends BaseActivity {
             byte[] barocode = intent.getByteArrayExtra("barocode");
             int barocodelen = intent.getIntExtra("length", 0);
             shortCode = new String(barocode, 0, barocodelen);
+            showLoadingDialog();
             scanUtils.stop();
             check(shortCode);
         }
