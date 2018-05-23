@@ -59,13 +59,13 @@ public class ManageActivity extends BaseActivity {
     //加载图标是否显示
     private boolean isLoading = false;
 
-    private String url = "https://lhhk.020szsq.com/houseNumberRelation/getAllHouseNumberByChip.do";
-
-    private String updateUrl = "https://lhhk.020szsq.com/houseNumberRelation/updateAppByJson.do";
-
-//    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/houseNumberRelation/getAllHouseNumberByChip.do";
+//    private String url = "https://lhhk.020szsq.com/houseNumberRelation/getAllHouseNumberByChip.do";
 //
-//    private String updateUrl = "http://lyl.tunnel.echomod.cn/whnsubhekou/houseNumberRelation/updateAppByJson.do";
+//    private String updateUrl = "https://lhhk.020szsq.com/houseNumberRelation/updateAppByJson.do";
+
+    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/houseNumberRelation/getAllHouseNumberByChip.do";
+
+    private String updateUrl = "http://lyl.tunnel.echomod.cn/whnsubhekou/houseNumberRelation/updateAppByJson.do";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +161,7 @@ public class ManageActivity extends BaseActivity {
                     msgAdapter.setDatas(beanList);
                     msgAdapter.notifyDataSetChanged();
                 } else {
-                    showToast(R.string.msg_get_information_fail);
+                    showToast(R.string.msg_get_information_fail_2);
                 }
             }
 
@@ -195,10 +195,10 @@ public class ManageActivity extends BaseActivity {
             @Override
             public void onSuccess(String result) {
                 MsgUpdateBean updateBean = gson.fromJson(result, MsgUpdateBean.class);
-                if (updateBean != null || updateBean.isResult()) {
+                if (updateBean != null && updateBean.isResult()) {
                     showToast(R.string.msg_update_success);
                 } else {
-                    showToast(R.string.msg_update_fail);
+                    showToast(updateBean.getMsg());
                 }
             }
 

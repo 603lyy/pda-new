@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.widget.FrameLayout;
 
+import com.google.gson.Gson;
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
 import com.tencent.smtt.sdk.CookieSyncManager;
 import com.tencent.smtt.sdk.WebChromeClient;
@@ -26,8 +27,13 @@ import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.yaheen.pdaapp.R;
+import com.yaheen.pdaapp.bean.CheckBean;
 import com.yaheen.pdaapp.widget.WebJavaScriptProvider;
 import com.yaheen.pdaapp.widget.X5WebView;
+
+import org.xutils.common.Callback;
+import org.xutils.http.RequestParams;
+import org.xutils.x;
 
 public class WebActivity extends BaseActivity {
 
@@ -37,14 +43,18 @@ public class WebActivity extends BaseActivity {
 
     private X5WebView mWebView;
 
-    private String url = "https://lhhk.020szsq.com/tool/toEntryMatch.do?shortLinkCode=";
+    private Gson gson = new Gson();
 
-    private String baseUrl = "https://lhhk.020szsq.com/tool/toEntryMatch.do";
+    private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
+
+//    private String url = "https://lhhk.020szsq.com/tool/toEntryMatch.do?shortLinkCode=";
+
+//    private String baseUrl = "https://lhhk.020szsq.com/tool/toEntryMatch.do";
 
 //    测试URL
-//    private String url = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do?shortLinkCode=";
+    private String url = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do?shortLinkCode=";
 //
-//    private String baseUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do";
+    private String baseUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do";
 
     private String shortCode = "";
 
@@ -172,12 +182,58 @@ public class WebActivity extends BaseActivity {
             byte[] barocode = intent.getByteArrayExtra("barocode");
             int barocodelen = intent.getIntExtra("length", 0);
             shortCode = new String(barocode, 0, barocodelen);
-            showToast(R.string.scan_success);
             scanUtils.stop();
-            loadUrl();
+            check(shortCode);
         }
 
     };
+
+    private void check( String slink) {
+
+        if (TextUtils.isEmpty(slink)) {
+            showToast(R.string.bind_activity_short_link_empty);
+            cancelLoadingDialog();
+            return;
+        }
+        slink = slink.substring(slink.lastIndexOf("/") + 1);
+
+        RequestParams params = new RequestParams(checkUrl);
+        params.addQueryStringParameter("key", "7zbQUBNY0XkEcUoushaJD7UcKyWkc91q");
+        params.addQueryStringParameter("shortLinkCode", slink);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                CheckBean checkBean = gson.fromJson(result, CheckBean.class);
+                if (checkBean != null && checkBean.isResult()) {
+                    if(TextUtils.isEmpty(checkBean.getEntity().getLink())){
+                        showToast(R.string.scan_success);
+                        loadUrl();
+                    }else {
+                        showToast(R.string.bind_activity_short_link_bind);
+                        cancelLoadingDialog();
+                    }
+                } else {
+                    showToast(R.string.scan_fail);
+                    cancelLoadingDialog();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                showToast(R.string.scan_fail);
+                cancelLoadingDialog();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+            }
+        });
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {

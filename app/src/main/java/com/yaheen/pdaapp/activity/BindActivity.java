@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.bean.BindBean;
+import com.yaheen.pdaapp.bean.CheckBean;
 import com.yaheen.pdaapp.util.ProgersssDialog;
 import com.yaheen.pdaapp.util.nfc.AESUtils;
 import com.yaheen.pdaapp.util.nfc.Converter;
@@ -51,6 +52,8 @@ public class BindActivity extends BaseActivity {
     private LinearLayout llBack;
 
     private String url = "http://shortlink.cn/eai/updateLongLink.do";
+
+    private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 
     private String barcodeStr;
 
@@ -93,10 +96,57 @@ public class BindActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 showLoadingDialog();
-                bind();
+                check();
             }
         });
 
+    }
+
+    private void check() {
+        String slink = tvScanShow.getText().toString();
+
+        if (TextUtils.isEmpty(slink)) {
+            showToast(R.string.bind_activity_short_link_empty);
+            cancelLoadingDialog();
+            return;
+        }
+        slink = slink.substring(slink.lastIndexOf("/") + 1);
+
+        RequestParams params = new RequestParams(checkUrl);
+        params.addQueryStringParameter("key", "7zbQUBNY0XkEcUoushaJD7UcKyWkc91q");
+        params.addQueryStringParameter("shortLinkCode", slink);
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                CheckBean checkBean = gson.fromJson(result, CheckBean.class);
+                if (checkBean != null && checkBean.isResult()) {
+                    if(TextUtils.isEmpty(checkBean.getEntity().getLink())){
+                        bind();
+                    }else {
+                        showToast(R.string.bind_activity_short_link_bind);
+                        cancelLoadingDialog();
+                    }
+                } else {
+                    showToast(R.string.bind_activity_bind_fail);
+                    cancelLoadingDialog();
+                }
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                showToast(R.string.bind_activity_bind_fail);
+                cancelLoadingDialog();
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+            }
+        });
     }
 
     private void bind() {
@@ -115,10 +165,11 @@ public class BindActivity extends BaseActivity {
             cancelLoadingDialog();
             return;
         }
+        slink = slink.substring(slink.lastIndexOf("/") + 1);
 
         RequestParams params = new RequestParams(url);
         params.addQueryStringParameter("key", "7zbQUBNY0XkEcUoushaJD7UcKyWkc91q");
-        params.addQueryStringParameter("shortLinkCode", barcodeStr);
+        params.addQueryStringParameter("shortLinkCode", slink);
         params.addQueryStringParameter("note", tvFetchShow.getText().toString());
         x.http().post(params, new Callback.CommonCallback<String>() {
             @Override
@@ -144,7 +195,7 @@ public class BindActivity extends BaseActivity {
 
             @Override
             public void onFinished() {
-               cancelLoadingDialog();
+                cancelLoadingDialog();
             }
         });
     }

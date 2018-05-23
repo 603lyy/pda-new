@@ -6,6 +6,7 @@
     <string name="btn_commit_text">提交</string>
     <string name="fetch_chip_fail">读取芯片失败</string>
     <string name="scan_success">扫描成功</string>
+    <string name="scan_fail">扫描失败</string>
 
     <string name="main_activity_scan">请先扫描门牌二维码</string>
 
@@ -20,6 +21,7 @@
     <string name="bind_activity_chip_empty">芯片id不能为空</string>
     <string name="bind_activity_bind_success">绑定成功</string>
     <string name="bind_activity_bind_fail">绑定失败</string>
+    <string name="bind_activity_short_link_bind">该短链接已绑定门牌</string>
 
     <string name="msg_sex_text">性别：</string>
     <string name="msg_id_text">门牌号：</string>
@@ -43,6 +45,7 @@
     <string name="msg_party_member_text">党员户：</string>
     <string name="msg_agriculturalProductsInformation_text">农特产信息：</string>
     <string name="msg_get_information_fail">获取门牌信息失败</string>
+    <string name="msg_get_information_fail_2">门牌未被使用</string>
     <string name="msg_get_information_request">请先获取门牌信息</string>
     <string name="msg_get_chip_id_request">请读取门牌ID</string>
     <string name="msg_update_success">修改成功</string>

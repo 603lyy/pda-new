@@ -69,11 +69,6 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
         scanUtils = new ScanUtils();
     }
 
-    public void openFetch(String mark){
-        scanUtils.start();
-        showToast(R.string.main_activity_scan);
-    }
-
     protected void setTitleContent(int content) {
         tvContent = findViewById(R.id.tv_title_content);
         if (tvContent != null) {
@@ -108,6 +103,10 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
     }
 
     public void showToast(int string){
+        toastUtils.showToast(string,this);
+    }
+
+    public void showToast(String string){
         toastUtils.showToast(string,this);
     }
 
@@ -169,24 +168,24 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
                         NfcVUtil nfcVUtil = new NfcVUtil(tech);
 
                         //写芯片数据
-                        String str = "0";
-                        byte[] by = str.getBytes();
-                        nfcVUtil.writeBlock((byte) 0x01,by);
-                        str="5";
-                        by= str.getBytes();
-                        nfcVUtil.writeBlock((byte) 0x02,by);
-                        str="2";
-                        by= str.getBytes();
-                        nfcVUtil.writeBlock((byte) 0x03,by);
-                        str="1";
-                        by= str.getBytes();
-                        nfcVUtil.writeBlock((byte) 0x04,by);
-                        str="0";
-                        by= str.getBytes();
-                        nfcVUtil.writeBlock((byte) 0x05,by);
-                        str="1";
-                        by= str.getBytes();
-                        nfcVUtil.writeBlock((byte) 0x06,by);
+                        String str = "";
+//                        byte[] by = str.getBytes();
+//                        nfcVUtil.writeBlock((byte) 0x01,by);
+//                        str="5";
+//                        by= str.getBytes();
+//                        nfcVUtil.writeBlock((byte) 0x02,by);
+//                        str="2";
+//                        by= str.getBytes();
+//                        nfcVUtil.writeBlock((byte) 0x03,by);
+//                        str="1";
+//                        by= str.getBytes();
+//                        nfcVUtil.writeBlock((byte) 0x04,by);
+//                        str="0";
+//                        by= str.getBytes();
+//                        nfcVUtil.writeBlock((byte) 0x05,by);
+//                        str="1";
+//                        by= str.getBytes();
+//                        nfcVUtil.writeBlock((byte) 0x06,by);
 
                         str = nfcVUtil.readBlocks(0, 27);
                         tech.close();
