@@ -23,11 +23,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.bean.BindBean;
 import com.yaheen.pdaapp.bean.CheckBean;
 import com.yaheen.pdaapp.util.ProgersssDialog;
 import com.yaheen.pdaapp.util.nfc.AESUtils;
+import com.yaheen.pdaapp.util.nfc.Base64;
 import com.yaheen.pdaapp.util.nfc.Converter;
 import com.yaheen.pdaapp.util.nfc.NfcVUtil;
 
@@ -52,6 +54,8 @@ public class BindActivity extends BaseActivity {
     private LinearLayout llBack;
 
     private String url = "http://shortlink.cn/eai/updateLongLink.do";
+
+    private String updateUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/houseNumbers/update.do";
 
     private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 
@@ -95,8 +99,9 @@ public class BindActivity extends BaseActivity {
         tvCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLoadingDialog();
-                check();
+//                showLoadingDialog();
+//                check();
+                update(tvScanShow.getText().toString(), tvFetchShow.getText().toString());
             }
         });
 
@@ -120,12 +125,7 @@ public class BindActivity extends BaseActivity {
             public void onSuccess(String result) {
                 CheckBean checkBean = gson.fromJson(result, CheckBean.class);
                 if (checkBean != null && checkBean.isResult()) {
-                    if(TextUtils.isEmpty(checkBean.getEntity().getLink())){
-                        bind();
-                    }else {
-                        showToast(R.string.bind_activity_short_link_bind);
-                        cancelLoadingDialog();
-                    }
+                    checkShortLink(checkBean.getEntity());
                 } else {
                     showToast(R.string.bind_activity_bind_fail);
                     cancelLoadingDialog();
@@ -200,6 +200,60 @@ public class BindActivity extends BaseActivity {
         });
     }
 
+    private void update(String chipId, String id) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", id);
+        jsonObject.addProperty("chipId", chipId);
+
+        RequestParams params = new RequestParams(updateUrl);
+        params.addQueryStringParameter("json", Base64.encode(jsonObject.toString().getBytes()));
+        x.http().post(params, new Callback.CommonCallback<String>() {
+            @Override
+            public void onSuccess(String result) {
+                Toast.makeText(BindActivity.this,"成功了",Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onError(Throwable ex, boolean isOnCallback) {
+                Toast.makeText(BindActivity.this,"失败",Toast.LENGTH_SHORT);
+            }
+
+            @Override
+            public void onCancelled(CancelledException cex) {
+
+            }
+
+            @Override
+            public void onFinished() {
+
+            }
+        });
+    }
+
+    private void checkShortLink(CheckBean.EntityBean date) {
+
+        if (date == null) {
+            showToast(R.string.scan_fail);
+            cancelLoadingDialog();
+            return;
+        }
+
+        //长链接为空，直接请求短链接系统绑定
+        if (TextUtils.isEmpty(date.getLink())) {
+            bind();
+        }
+        //长链接不为空且门牌ID不为空,提示已被绑定
+        else if (!TextUtils.isEmpty(date.getLink()) && TextUtils.isEmpty(date.getNote())) {
+            showToast(R.string.bind_activity_short_link_bind);
+            cancelLoadingDialog();
+        }
+        //长链接不为空且门牌ID为空,请求短链接系统和门牌系统
+        else if (!TextUtils.isEmpty(date.getLink()) && TextUtils.isEmpty(date.getNote())) {
+
+        }
+    }
+
     private BroadcastReceiver mScanReceiver = new BroadcastReceiver() {
 
         @Override
@@ -237,7 +291,7 @@ public class BindActivity extends BaseActivity {
     protected void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
-        scanUtils.stop();
+//        scanUtils.stop();
         unregisterReceiver(mScanReceiver);
     }
 

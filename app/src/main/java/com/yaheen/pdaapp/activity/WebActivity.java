@@ -28,6 +28,9 @@ import com.tencent.smtt.sdk.WebView;
 import com.tencent.smtt.sdk.WebViewClient;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.bean.CheckBean;
+import com.yaheen.pdaapp.util.DialogUtils;
+import com.yaheen.pdaapp.util.dialog.DialogCallback;
+import com.yaheen.pdaapp.util.dialog.IDialogCancelCallback;
 import com.yaheen.pdaapp.widget.WebJavaScriptProvider;
 import com.yaheen.pdaapp.widget.X5WebView;
 
@@ -48,19 +51,19 @@ public class WebActivity extends BaseActivity {
     private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 
 //    private String url = "https://lhhk.020szsq.com/tool/toEntryMatch.do?shortLinkCode=";
-
+//
 //    private String baseUrl = "https://lhhk.020szsq.com/tool/toEntryMatch.do";
 
 //    测试URL
     private String url = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do?shortLinkCode=";
-//
+
     private String baseUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do";
 
     private String shortCode = "";
 
     private String type = "mark=";
 
-    private String typeStr = "a";
+    private String typeStr = "b";
 
     @SuppressLint("JavascriptInterface")
     @Override
@@ -167,8 +170,19 @@ public class WebActivity extends BaseActivity {
         }
 
         @JavascriptInterface
+        public void showNormalToast() {
+            showGoDialog(R.string.web_activity_not_bind_short_link_normal);
+        }
+
+        @JavascriptInterface
+        public void showRefreshToast() {
+            showGoDialog(R.string.web_activity_not_bind_short_link_refresh);
+        }
+
+        @JavascriptInterface
         public void back() {
             finish();
+//            mWebView.loadUrl("javascript:myrefresh()");
         }
 
     }
@@ -188,7 +202,7 @@ public class WebActivity extends BaseActivity {
 
     };
 
-    private void check( String slink) {
+    private void check(String slink) {
 
         if (TextUtils.isEmpty(slink)) {
             showToast(R.string.bind_activity_short_link_empty);
@@ -205,15 +219,9 @@ public class WebActivity extends BaseActivity {
             public void onSuccess(String result) {
                 CheckBean checkBean = gson.fromJson(result, CheckBean.class);
                 if (checkBean != null && checkBean.isResult()) {
-                    if(TextUtils.isEmpty(checkBean.getEntity().getLink())){
-                        showToast(R.string.scan_success);
-                        loadUrl();
-                    }else {
-                        showToast(R.string.web_activity_short_link_used);
-                        cancelLoadingDialog();
-                    }
+                    checkShortLink(checkBean.getEntity());
                 } else {
-                    showToast(R.string.scan_fail);
+                    showToast(R.string.scan_not);
                     cancelLoadingDialog();
                 }
             }
@@ -233,6 +241,50 @@ public class WebActivity extends BaseActivity {
             public void onFinished() {
             }
         });
+    }
+
+    private void checkShortLink(CheckBean.EntityBean date) {
+
+        if (date == null) {
+            showToast(R.string.scan_fail);
+            cancelLoadingDialog();
+            return;
+        }
+
+        //长链接不为空
+        if (!TextUtils.isEmpty(date.getLink())) {
+            //门牌ID为空,即已经录入数据，提示是否需要绑定门牌ID
+            if (TextUtils.isEmpty(date.getNote())) {
+                showGoDialog(R.string.web_activity_not_bind_short_link);
+            }
+            //门牌ID不为空，即门牌已经可以正常使用，提示短链接已被使用
+            else {
+                showToast(R.string.web_activity_short_link_used);
+                cancelLoadingDialog();
+            }
+        }
+        //正常情况，进入录入数据环节
+        else {
+            showToast(R.string.scan_success);
+            loadUrl();
+        }
+    }
+
+    private void showGoDialog(int string){
+        DialogUtils.showNormalDialog(this, getString(string),
+                new DialogCallback() {
+                    @Override
+                    public void callback() {
+
+                    }
+                },
+                new IDialogCancelCallback() {
+                    @Override
+                    public void cancelCallback() {
+
+                    }
+                }, getString(R.string.web_activity_not_go), getString(R.string.web_activity_go),
+                getString(R.string.web_activity_dialog_title));
     }
 
     @Override

@@ -42,9 +42,6 @@ dependencies {
     //网络请求工具
     implementation 'org.xutils:xutils:3.3.42'
     implementation 'com.google.code.gson:gson:2.2.4'
-    //权限申请
-    //    implementation 'pub.devrel:easypermissions:0.2.0'
-    //    implementation files('libs/tbs_sdk_thirdapp_v3.6.0.1183_43604_sharewithdownload_withoutGame_obfs_20180211_105126.jar')
     //pda二维码sdk
     implementation files('libs/scanSDK.jar')
     //bugly崩溃收集
