@@ -55,11 +55,15 @@ public class BindActivity extends RFIDBaseActivity {
 
     private String url = "http://shortlink.cn/eai/updateLongLink.do";
 
-    private String updateUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/houseNumbers/update.do";
+//    private String updateUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/houseNumbers/update.do";
+
+    private String updateUrl = "https://lhhk.020szsq.com/houseNumbers/updateFormDataManagement.do";
 
     private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 
     private String barcodeStr;
+
+    private String hNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +105,8 @@ public class BindActivity extends RFIDBaseActivity {
         tvCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                showLoadingDialog();
-//                check();
-                update(tvScanShow.getText().toString(), tvFetchShow.getText().toString());
+                showLoadingDialog();
+                check();
             }
         });
 
@@ -151,7 +154,12 @@ public class BindActivity extends RFIDBaseActivity {
         });
     }
 
-    private void bind() {
+    /**
+     * 是否同步更新门牌系统
+     *
+     * @param update
+     */
+    private void bind(final boolean update) {
 
         String slink = tvScanShow.getText().toString();
         String chip = tvFetchShow.getText().toString();
@@ -178,9 +186,15 @@ public class BindActivity extends RFIDBaseActivity {
             public void onSuccess(String result) {
                 BindBean bindBean = gson.fromJson(result, BindBean.class);
                 if (bindBean != null && bindBean.isResult()) {
-                    showToast(R.string.bind_activity_bind_success);
+                    if(update){
+                        update(tvFetchShow.getText().toString(),hNumber);
+                    }else {
+                        showToast(R.string.bind_activity_bind_success);
+                        cancelLoadingDialog();
+                    }
                 } else {
                     showToast(R.string.bind_activity_bind_fail);
+                    cancelLoadingDialog();
                 }
                 clearData();
             }
@@ -204,21 +218,30 @@ public class BindActivity extends RFIDBaseActivity {
 
     private void update(String chipId, String id) {
 
+        if (TextUtils.isEmpty(chipId)) {
+            showToast(R.string.main_activity_scan);
+            return;
+        }
+
+        chipId = chipId.substring(chipId.lastIndexOf("/") + 1);
+        id = id.substring(id.lastIndexOf("=") + 1);
+
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", id);
         jsonObject.addProperty("chipId", chipId);
 
         RequestParams params = new RequestParams(updateUrl);
+        params.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
         params.addQueryStringParameter("json", Base64.encode(jsonObject.toString().getBytes()));
-        x.http().post(params, new Callback.CommonCallback<String>() {
+        x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                Toast.makeText(BindActivity.this,"成功了",Toast.LENGTH_SHORT);
+                showToast(R.string.bind_activity_bind_success);
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                Toast.makeText(BindActivity.this,"失败",Toast.LENGTH_SHORT);
+                showToast(R.string.bind_activity_bind_fail);
             }
 
             @Override
@@ -228,7 +251,7 @@ public class BindActivity extends RFIDBaseActivity {
 
             @Override
             public void onFinished() {
-
+                cancelLoadingDialog();
             }
         });
     }
@@ -243,16 +266,17 @@ public class BindActivity extends RFIDBaseActivity {
 
         //长链接为空，直接请求短链接系统绑定
         if (TextUtils.isEmpty(date.getLink())) {
-            bind();
+            bind(false);
         }
         //长链接不为空且门牌ID不为空,提示已被绑定
-        else if (!TextUtils.isEmpty(date.getLink()) && TextUtils.isEmpty(date.getNote())) {
+        else if (!TextUtils.isEmpty(date.getLink()) && !TextUtils.isEmpty(date.getNote())) {
             showToast(R.string.bind_activity_short_link_bind);
             cancelLoadingDialog();
         }
         //长链接不为空且门牌ID为空,请求短链接系统和门牌系统
         else if (!TextUtils.isEmpty(date.getLink()) && TextUtils.isEmpty(date.getNote())) {
-
+            hNumber = date.getLink();
+            bind(true);
         }
     }
 
