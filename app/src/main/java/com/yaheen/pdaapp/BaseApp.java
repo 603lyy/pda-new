@@ -7,6 +7,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.magicrf.uhfreaderlib.reader.UhfReader;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.smtt.sdk.QbSdk;
 import com.yaheen.pdaapp.util.FreeHandSystemUtil;
@@ -62,6 +63,9 @@ public class BaseApp extends android.app.Application {
         //网络请求
         x.Ext.init(this);
         x.Ext.setDebug(false); //输出debug日志，开启会影响性能
+
+        //RFID
+        UhfReader.setPortPath("/dev/ttyS2");
 
         //x5内核
         QbSdk.PreInitCallback cb = new QbSdk.PreInitCallback() {

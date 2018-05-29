@@ -68,4 +68,7 @@
     <string name="report_empty_toast">请扫描二维码或读取门牌ID</string>
     <string name="report_success">报障成功</string>
     <string name="report_fail">报障失败</string>
+
+    <string name="rfid_read_success">读取芯片成功</string>
+    <string name="rfid_read_fail">读取芯片失败，请重新读取</string>
 </resources>

@@ -11,13 +11,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.magicrf.uhfreaderlib.reader.Tools;
 import com.yaheen.pdaapp.BaseApp;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.util.DialogUtils;
 import com.yaheen.pdaapp.util.dialog.DialogCallback;
 import com.yaheen.pdaapp.util.dialog.IDialogCancelCallback;
 
-public class MainActivity extends BaseActivity {
+import java.io.File;
+import java.io.FileWriter;
+import java.util.List;
+
+public class MainActivity extends RFIDBaseActivity {
 
     private final static String SCAN_ACTION = "scan.rcv.message";
 
@@ -56,7 +61,7 @@ public class MainActivity extends BaseActivity {
             public void onClick(View view) {
 //                showToast(R.string.main_activity_scan);
 //                scanUtils.start();
-            startWebActivity(barcodeStr);
+                startWebActivity(barcodeStr);
             }
         });
 

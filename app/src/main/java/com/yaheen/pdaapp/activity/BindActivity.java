@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import static com.yaheen.pdaapp.util.nfc.NFCUtils.ByteArrayToHexString;
 import static com.yaheen.pdaapp.util.nfc.NFCUtils.toStringHex;
 
-public class BindActivity extends BaseActivity {
+public class BindActivity extends RFIDBaseActivity {
 
     private final static String SCAN_ACTION = "scan.rcv.message";
 
@@ -91,7 +91,9 @@ public class BindActivity extends BaseActivity {
         tvFetch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setLoadState(true);
+//                setLoadState(true);
+                setCanRead(true);
+                tvFetchShow.setText("");
                 tvFetch.setBackground(getResources().getDrawable(R.drawable.btn_gary_round));
             }
         });
@@ -280,7 +282,6 @@ public class BindActivity extends BaseActivity {
         super.setNoteBody(body);
         if (!TextUtils.isEmpty(body)) {
             tvFetchShow.setText(body);
-            setLoadState(false);
         } else {
             showToast(R.string.fetch_chip_fail);
         }

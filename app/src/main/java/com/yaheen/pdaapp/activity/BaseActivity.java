@@ -3,6 +3,7 @@ package com.yaheen.pdaapp.activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -12,15 +13,20 @@ import android.nfc.tech.NfcB;
 import android.nfc.tech.NfcV;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.magicrf.uhfreaderlib.reader.UhfReader;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.base.NfcInterface;
+import com.yaheen.pdaapp.rfid.ScreenStateReceiver;
+import com.yaheen.pdaapp.rfid.UhfReaderDevice;
 import com.yaheen.pdaapp.util.ProgersssDialog;
 import com.yaheen.pdaapp.util.nfc.AESUtils;
 import com.yaheen.pdaapp.util.nfc.Converter;
@@ -28,6 +34,8 @@ import com.yaheen.pdaapp.util.nfc.NfcVUtil;
 import com.yaheen.pdaapp.util.scan.ScanUtils;
 import com.yaheen.pdaapp.util.toast.ToastUtils;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -36,6 +44,7 @@ import static com.yaheen.pdaapp.util.nfc.NFCUtils.toStringHex;
 
 public class BaseActivity extends AppCompatActivity implements NfcInterface {
 
+    //nfc
     private NfcB nfcbTag;
     private Tag tagFromIntent;
     private NfcAdapter mNfcAdapter;
@@ -69,13 +78,6 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
         scanUtils = new ScanUtils();
     }
 
-    protected void setTitleContent(int content) {
-        tvContent = findViewById(R.id.tv_title_content);
-        if (tvContent != null) {
-            tvContent.setText(content);
-        }
-    }
-
     private void initNFC() {
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);// 设备注册
         if (mNfcAdapter == null) {
@@ -102,12 +104,19 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
         mNdefExchangeFilters = new IntentFilter[]{ndefDetected, ttech, td};
     }
 
-    public void showToast(int string){
-        toastUtils.showToast(string,this);
+    protected void setTitleContent(int content) {
+        tvContent = findViewById(R.id.tv_title_content);
+        if (tvContent != null) {
+            tvContent.setText(content);
+        }
     }
 
-    public void showToast(String string){
-        toastUtils.showToast(string,this);
+    public void showToast(int string) {
+        toastUtils.showToast(string, this);
+    }
+
+    public void showToast(String string) {
+        toastUtils.showToast(string, this);
     }
 
     public void showLoadingDialog() {
@@ -330,5 +339,4 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
             resolvIntent(getIntent());
         }
     }
-
 }

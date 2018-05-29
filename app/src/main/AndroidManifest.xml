@@ -37,7 +37,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.ManageActivity" />
         <activity android:name=".activity.WebActivity" />
-        <activity android:name=".activity.ReportActivity"></activity>
+        <activity android:name=".activity.ReportActivity"/>
     </application>
 
 </manifest>

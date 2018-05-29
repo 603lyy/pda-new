@@ -44,7 +44,7 @@ import java.util.List;
 import static com.yaheen.pdaapp.util.nfc.NFCUtils.ByteArrayToHexString;
 import static com.yaheen.pdaapp.util.nfc.NFCUtils.toStringHex;
 
-public class ManageActivity extends BaseActivity {
+public class ManageActivity extends RFIDBaseActivity {
 
     private ListView listView;
 
@@ -132,9 +132,9 @@ public class ManageActivity extends BaseActivity {
         tvLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setLoadState(true);
+//                setLoadState(true);
+                setCanRead(true);
                 tvLoad.setBackground(getResources().getDrawable(R.drawable.btn_gary_round));
-//                Toast.makeText(ManageActivity.this, R.string.msg_get_chip_id_request, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -225,7 +225,6 @@ public class ManageActivity extends BaseActivity {
         if (!TextUtils.isEmpty(body)) {
             showLoadingDialog();
             getInformation(body);
-            setLoadState(false);
         } else {
             showToast(R.string.fetch_chip_fail);
         }
