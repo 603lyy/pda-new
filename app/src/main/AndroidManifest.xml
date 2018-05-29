@@ -38,6 +38,7 @@
         <activity android:name=".activity.ManageActivity" />
         <activity android:name=".activity.WebActivity" />
         <activity android:name=".activity.ReportActivity"/>
+        <activity android:name=".activity.WebChangeLocationActivity"/>
     </application>
 
 </manifest>

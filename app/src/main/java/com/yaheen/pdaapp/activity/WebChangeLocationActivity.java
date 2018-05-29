@@ -2,7 +2,6 @@ package com.yaheen.pdaapp.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +17,7 @@ import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tencent.smtt.export.external.interfaces.GeolocationPermissionsCallback;
@@ -29,6 +29,7 @@ import com.tencent.smtt.sdk.WebViewClient;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.bean.CheckBean;
 import com.yaheen.pdaapp.util.DialogUtils;
+import com.yaheen.pdaapp.util.ProgersssDialog;
 import com.yaheen.pdaapp.util.dialog.DialogCallback;
 import com.yaheen.pdaapp.util.dialog.IDialogCancelCallback;
 import com.yaheen.pdaapp.widget.WebJavaScriptProvider;
@@ -38,34 +39,27 @@ import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-public class WebActivity extends BaseActivity {
+public class WebChangeLocationActivity extends BaseActivity {
 
     private final static String SCAN_ACTION = "scan.rcv.message";
+
+    private Gson gson = new Gson();
 
     private ViewGroup mViewParent;
 
     private X5WebView mWebView;
 
-    private Gson gson = new Gson();
-
     private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 
-    private String url = "https://lhhk.020szsq.com/tool/toEntryMatch.do?shortLinkCode=";
+    private String url = "https://lhhk.020szsq.com/tool/toUpdateLocation.do?shortLinkCode=";
 
-    private String baseUrl = "https://lhhk.020szsq.com/tool/toEntryMatch.do";
+    private String baseUrl = "https://lhhk.020szsq.com/tool/toUpdateLocation.do";
 
-//    测试URL
-//    private String url = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do?shortLinkCode=";
+//    private String url = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toUpdateLocation.do?shortLinkCode=";
 //
-//    private String baseUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do";
+//    private String baseUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toUpdateLocation.do";
 
     private String shortCode = "";
-
-    private String type = "mark=";
-
-    private String typeStr = "b";
-
-    private boolean hasId = false;
 
     @SuppressLint("JavascriptInterface")
     @Override
@@ -73,7 +67,7 @@ public class WebActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
 
-        mViewParent = (ViewGroup) findViewById(R.id.web_parent);
+        mViewParent = findViewById(R.id.web_parent);
 
         init();
         showLoadingDialog();
@@ -84,9 +78,9 @@ public class WebActivity extends BaseActivity {
 //        mWebView.loadUrl("file:///android_asset/web.html");
         shortCode = shortCode.substring(shortCode.lastIndexOf("/") + 1);
         if (!TextUtils.isEmpty(shortCode)) {
-            mWebView.loadUrl(url + shortCode + "&" + type + typeStr);
+            mWebView.loadUrl(url + shortCode);
         } else {
-            mWebView.loadUrl(baseUrl + "?" + type + typeStr);
+            mWebView.loadUrl(baseUrl);
         }
     }
 
@@ -110,10 +104,10 @@ public class WebActivity extends BaseActivity {
         });
 
         if (Build.VERSION.SDK_INT >= 23) {
-            int checkPermission = ContextCompat.checkSelfPermission(WebActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION);
+            int checkPermission = ContextCompat.checkSelfPermission(WebChangeLocationActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION);
             if (checkPermission != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(WebActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-                ActivityCompat.requestPermissions(WebActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                ActivityCompat.requestPermissions(WebChangeLocationActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+                ActivityCompat.requestPermissions(WebChangeLocationActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
             } else {
                 initWebViewSetting();
             }
@@ -168,7 +162,6 @@ public class WebActivity extends BaseActivity {
         @JavascriptInterface
         public void openFetch(String mark) {
             scanUtils.start();
-            typeStr = mark;
         }
 
         @JavascriptInterface
@@ -184,7 +177,6 @@ public class WebActivity extends BaseActivity {
         @JavascriptInterface
         public void back() {
             finish();
-//            mWebView.loadUrl("javascript:myrefresh()");
         }
 
     }
@@ -207,7 +199,7 @@ public class WebActivity extends BaseActivity {
     private void check(String slink) {
 
         if (TextUtils.isEmpty(slink)) {
-            showToast(R.string.bind_activity_short_link_empty);
+            Toast.makeText(this, R.string.bind_activity_short_link_empty, Toast.LENGTH_SHORT).show();
             cancelLoadingDialog();
             return;
         }
@@ -223,14 +215,14 @@ public class WebActivity extends BaseActivity {
                 if (checkBean != null && checkBean.isResult()) {
                     checkShortLink(checkBean.getEntity());
                 } else {
-                    showToast(R.string.scan_not);
+                    Toast.makeText(WebChangeLocationActivity.this, R.string.scan_not, Toast.LENGTH_SHORT).show();
                     cancelLoadingDialog();
                 }
             }
 
             @Override
             public void onError(Throwable ex, boolean isOnCallback) {
-                showToast(R.string.scan_fail);
+                Toast.makeText(WebChangeLocationActivity.this, R.string.scan_fail, Toast.LENGTH_SHORT).show();
                 cancelLoadingDialog();
             }
 
@@ -248,60 +240,44 @@ public class WebActivity extends BaseActivity {
     private void checkShortLink(CheckBean.EntityBean date) {
 
         if (date == null) {
-            showToast(R.string.scan_fail);
+            Toast.makeText(this, R.string.scan_fail, Toast.LENGTH_SHORT).show();
             cancelLoadingDialog();
             return;
         }
 
         //长链接不为空
         if (!TextUtils.isEmpty(date.getLink())) {
-            //门牌ID为空,即已经录入数据，提示是否需要绑定门牌ID
+            //门牌ID为空,即已经录入数据，重新加载界面
             if (TextUtils.isEmpty(date.getNote())) {
-                showGoDialog(R.string.web_activity_not_bind_short_link, false);
+                loadUrl();
+//                showGoDialog(R.string.web_activity_not_bind_short_link, false);
             }
-            //门牌ID不为空，即门牌已经可以正常使用，提示短链接已被使用
+            //门牌ID不为空，即门牌已经可以正常使用
             else {
-                showToast(R.string.web_activity_short_link_used);
-                cancelLoadingDialog();
+                loadUrl();
             }
-        }
-        //正常情况，进入录入数据环节
-        else {
-            if (!TextUtils.isEmpty(date.getNote())) {
-                hasId = true;
+        } else {
+            //门牌ID为空,提示短链接未被使用
+            if (TextUtils.isEmpty(date.getNote())) {
+                Toast.makeText(this, R.string.web_activity_short_link_unuse, Toast.LENGTH_SHORT).show();
             }
-            showToast(R.string.scan_success);
-            loadUrl();
+            //门牌ID不为空，提示未录入数据
+            else {
+                Toast.makeText(this, R.string.web_activity_need_data, Toast.LENGTH_SHORT).show();
+            }
+            cancelLoadingDialog();
         }
     }
 
     private void showGoDialog(int string, final boolean refresh) {
-
-        if (hasId) {
-            if (refresh) {
-                mWebView.loadUrl("javascript:myrefresh()");
-//                if (typeStr.equals("b")) {
-//                    shortCode = "";
-//                    loadUrl();
-//                }
-            }
-            return;
-        }
-
         DialogUtils.showNormalDialog(this, getString(string),
                 new DialogCallback() {
                     @Override
                     public void callback() {
                         if (refresh) {
                             mWebView.loadUrl("javascript:myrefresh()");
-//                            if (typeStr.equals("b")) {
-//                                shortCode = "";
-//                                loadUrl();
-//                            }
                         }
-                        Intent intent = new Intent(WebActivity.this, BindActivity.class);
-                        startActivity(intent);
-                        finish();
+                        showToast("chenggong");
                     }
                 },
                 new IDialogCancelCallback() {
@@ -309,10 +285,6 @@ public class WebActivity extends BaseActivity {
                     public void cancelCallback() {
                         if (refresh) {
                             mWebView.loadUrl("javascript:myrefresh()");
-//                            if (typeStr.equals("b")) {
-//                                shortCode = "";
-//                                loadUrl();
-//                            }
                         }
                     }
                 }, getString(R.string.web_activity_go), getString(R.string.web_activity_not_go),
@@ -344,7 +316,6 @@ public class WebActivity extends BaseActivity {
             geolocationPermissionsCallback.invoke(s, true, true);
             super.onGeolocationPermissionsShowPrompt(s, geolocationPermissionsCallback);
         }
-
     };
 
     @Override

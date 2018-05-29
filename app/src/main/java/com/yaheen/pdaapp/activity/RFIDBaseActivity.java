@@ -119,6 +119,7 @@ public class RFIDBaseActivity extends BaseActivity {
             switch (msg.what) {
                 case msg_get_read_rfid_success:
                     String dataStr = (String) msg.obj;
+                    dataStr = dataStr.replaceAll("0+?$", "");
                     setNoteBody(dataStr);
                     break;
                 default:
