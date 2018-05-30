@@ -175,6 +175,12 @@ public class WebChangeLocationActivity extends BaseActivity {
         }
 
         @JavascriptInterface
+        public void showRefreshLocationToast() {
+            shortCode = "";
+            loadUrl();
+        }
+
+        @JavascriptInterface
         public void back() {
             finish();
         }
