@@ -292,6 +292,7 @@ public class WebActivity extends BaseActivity {
                 new DialogCallback() {
                     @Override
                     public void callback() {
+                        cancelLoadingDialog();
                         if (refresh) {
                             mWebView.loadUrl("javascript:myrefresh()");
 //                            if (typeStr.equals("b")) {
@@ -309,11 +310,8 @@ public class WebActivity extends BaseActivity {
                     public void cancelCallback() {
                         if (refresh) {
                             mWebView.loadUrl("javascript:myrefresh()");
-//                            if (typeStr.equals("b")) {
-//                                shortCode = "";
-//                                loadUrl();
-//                            }
                         }
+                        cancelLoadingDialog();
                     }
                 }, getString(R.string.web_activity_go), getString(R.string.web_activity_not_go),
                 getString(R.string.web_activity_dialog_title));

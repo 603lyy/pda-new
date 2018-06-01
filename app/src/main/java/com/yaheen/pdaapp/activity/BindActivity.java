@@ -1,21 +1,10 @@
 package com.yaheen.pdaapp.activity;
 
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.device.ScanDevice;
-import android.nfc.NdefMessage;
-import android.nfc.NdefRecord;
-import android.nfc.NfcAdapter;
-import android.nfc.Tag;
-import android.nfc.tech.MifareUltralight;
-import android.nfc.tech.NfcB;
-import android.nfc.tech.NfcV;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -26,22 +15,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.bean.BindBean;
+import com.yaheen.pdaapp.bean.BindUpdataBean;
 import com.yaheen.pdaapp.bean.CheckBean;
-import com.yaheen.pdaapp.util.ProgersssDialog;
-import com.yaheen.pdaapp.util.nfc.AESUtils;
 import com.yaheen.pdaapp.util.nfc.Base64;
-import com.yaheen.pdaapp.util.nfc.Converter;
-import com.yaheen.pdaapp.util.nfc.NfcVUtil;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import static com.yaheen.pdaapp.util.nfc.NFCUtils.ByteArrayToHexString;
-import static com.yaheen.pdaapp.util.nfc.NFCUtils.toStringHex;
 
 public class BindActivity extends RFIDBaseActivity {
 
@@ -236,7 +216,12 @@ public class BindActivity extends RFIDBaseActivity {
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {
-                showToast(R.string.bind_activity_bind_success);
+                BindUpdataBean data = gson.fromJson(result, BindUpdataBean.class);
+                if (data != null && data.isResult()) {
+                    showToast(R.string.bind_activity_bind_success);
+                } else {
+                    showToast(R.string.bind_activity_bind_fail);
+                }
             }
 
             @Override
