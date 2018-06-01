@@ -4,23 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.device.ScanDevice;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.magicrf.uhfreaderlib.reader.Tools;
 import com.yaheen.pdaapp.BaseApp;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.util.DialogUtils;
 import com.yaheen.pdaapp.util.dialog.DialogCallback;
 import com.yaheen.pdaapp.util.dialog.IDialogCancelCallback;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.util.List;
 
 public class MainActivity extends RFIDBaseActivity {
 

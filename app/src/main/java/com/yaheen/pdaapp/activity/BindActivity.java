@@ -186,9 +186,9 @@ public class BindActivity extends RFIDBaseActivity {
             public void onSuccess(String result) {
                 BindBean bindBean = gson.fromJson(result, BindBean.class);
                 if (bindBean != null && bindBean.isResult()) {
-                    if(update){
-                        update(tvFetchShow.getText().toString(),hNumber);
-                    }else {
+                    if (update) {
+                        update(tvFetchShow.getText().toString(), hNumber);
+                    } else {
                         showToast(R.string.bind_activity_bind_success);
                         cancelLoadingDialog();
                     }
@@ -287,10 +287,12 @@ public class BindActivity extends RFIDBaseActivity {
             // TODO Auto-generated method stub
             byte[] barocode = intent.getByteArrayExtra("barocode");
             int barocodelen = intent.getIntExtra("length", 0);
-            byte temp = intent.getByteExtra("barcodeType", (byte) 0);
-            android.util.Log.i("debug", "----codetype--" + temp);
             barcodeStr = new String(barocode, 0, barocodelen);
-            tvScanShow.setText(barcodeStr);
+            if (barcodeStr.contains("http://shortlink.cn/")) {
+                tvScanShow.setText(barcodeStr);
+            } else {
+                Toast.makeText(BindActivity.this, R.string.scan_not, Toast.LENGTH_SHORT).show();
+            }
             scanUtils.stop();
         }
 

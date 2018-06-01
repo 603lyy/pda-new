@@ -112,10 +112,12 @@ public class ReportActivity extends RFIDBaseActivity {
             // TODO Auto-generated method stub
             byte[] barocode = intent.getByteArrayExtra("barocode");
             int barocodelen = intent.getIntExtra("length", 0);
-            byte temp = intent.getByteExtra("barcodeType", (byte) 0);
-            android.util.Log.i("debug", "----codetype--" + temp);
             barcodeStr = new String(barocode, 0, barocodelen);
-            tvAddress.setText(barcodeStr);
+            if(barcodeStr.contains("http://shortlink.cn/")){
+                tvAddress.setText(barcodeStr);
+            }else {
+                Toast.makeText(ReportActivity.this, R.string.scan_not, Toast.LENGTH_SHORT).show();
+            }
             scanUtils.stop();
         }
 
