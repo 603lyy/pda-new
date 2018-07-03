@@ -5,6 +5,7 @@ import java.security.Key;
 import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 
@@ -29,6 +30,40 @@ public class RSAUtils {
      * RSA最大解密密文大小
      */
     public static final int MAX_DECRYPT_BLOCK = (KEY_SIZE / 8);
+
+    /**
+     * 校验数字签名
+     *
+     * @param data
+     *            加密数据
+     * @param publicKey
+     *            公钥
+     * @param sign
+     *            数字签名(Base64)
+     *
+     * @return 校验成功返回true,失败返回false
+     *
+     */
+    public static boolean verify(byte[] data, String publicKey, String sign) {
+        try {
+            // 解密由base64编码的公钥
+            byte[] keyBytes = Base64Utils.decode(publicKey);
+            // 构造X509EncodedKeySpec对象
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+            // KEY_ALGORITHM 指定的加密算法
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            // 取公钥匙对象
+            PublicKey pubKey = keyFactory.generatePublic(keySpec);
+            Signature signature = Signature.getInstance("MD5withRSA");
+            signature.initVerify(pubKey);
+            signature.update(data);
+            // 验证签名是否正常
+            return signature.verify(Base64Utils.decode(sign));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public static byte[] encrypt(byte[] data, Key key) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -106,7 +141,7 @@ public class RSAUtils {
     public static byte[] encryptByPublicKey(String sSrc, String sKey) {
         byte[] encrypted = new byte[0];
         try {
-            byte[] bKeys = Base64.decode(sKey);
+            byte[] bKeys = Base64Utils.decode(sKey);
             byte[] bSrcs = sSrc.getBytes("UTF-8");
             encrypted = encryptByPublicKey(bSrcs, bKeys);
         } catch (Exception e) {
@@ -118,7 +153,7 @@ public class RSAUtils {
     public static byte[] encryptByPrivateKey(String sSrc, String sKey) {
         byte[] encrypted = new byte[0];
         try {
-            byte[] bKeys = Base64.decode(sKey);
+            byte[] bKeys = Base64Utils.decode(sKey);
             byte[] bSrcs = sSrc.getBytes("UTF-8");
             encrypted = encryptByPrivateKey(bSrcs, bKeys);
         } catch (Exception e) {
@@ -129,22 +164,22 @@ public class RSAUtils {
 
     public static String encryptByPublicKeyToString(byte[] sSrc, byte[] sKey) {
         byte[] encrypted = encryptByPublicKey(sSrc, sKey);
-        return Base64.encode(encrypted);
+        return Base64Utils.encode(encrypted);
     }
 
     public static String encryptByPrivateKeyToString(byte[] sSrc, byte[] sKey) {
         byte[] encrypted = encryptByPrivateKey(sSrc, sKey);
-        return Base64.encode(encrypted);
+        return Base64Utils.encode(encrypted);
     }
 
     public static String encryptByPublicKeyToString(String sSrc, String sKey) {
         byte[] encrypted = encryptByPublicKey(sSrc, sKey);
-        return Base64.encode(encrypted);
+        return Base64Utils.encode(encrypted);
     }
 
     public static String encryptByPrivateKeyToString(String sSrc, String sKey) {
         byte[] encrypted = encryptByPrivateKey(sSrc, sKey);
-        return Base64.encode(encrypted);
+        return Base64Utils.encode(encrypted);
     }
 
     public static byte[] decrypt(byte[] data, Key key) {
@@ -224,8 +259,8 @@ public class RSAUtils {
     public static byte[] decryptByPublicKey(String sSrc, String sKey) {
         byte[] original = new byte[0];
         try {
-            byte[] bKeys = Base64.decode(sKey);
-            byte[] bSrcs = Base64.decode(sSrc);
+            byte[] bKeys = Base64Utils.decode(sKey);
+            byte[] bSrcs = Base64Utils.decode(sSrc);
             original = decryptByPublicKey(bSrcs, bKeys);
         } catch (Exception e) {
             e.printStackTrace();
@@ -236,8 +271,8 @@ public class RSAUtils {
     public static byte[] decryptByPrivateKey(String sSrc, String sKey) {
         byte[] original = new byte[0];
         try {
-            byte[] bKeys = Base64.decode(sKey);
-            byte[] bSrcs = Base64.decode(sSrc);
+            byte[] bKeys = Base64Utils.decode(sKey);
+            byte[] bSrcs = Base64Utils.decode(sSrc);
             original = decryptByPrivateKey(bSrcs, bKeys);
         } catch (Exception e) {
             e.printStackTrace();

@@ -26,23 +26,14 @@ import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.adapter.ManageMsgAdapter;
 import com.yaheen.pdaapp.bean.MsgBean;
 import com.yaheen.pdaapp.bean.MsgUpdateBean;
-import com.yaheen.pdaapp.util.ProgersssDialog;
-import com.yaheen.pdaapp.util.nfc.AESUtils;
-import com.yaheen.pdaapp.util.nfc.Base64;
-import com.yaheen.pdaapp.util.nfc.Converter;
-import com.yaheen.pdaapp.util.nfc.NfcVUtil;
-import com.yaheen.pdaapp.util.toast.ToastUtils;
+import com.yaheen.pdaapp.util.nfc.Base64Utils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.yaheen.pdaapp.util.nfc.NFCUtils.ByteArrayToHexString;
-import static com.yaheen.pdaapp.util.nfc.NFCUtils.toStringHex;
 
 public class ManageActivity extends RFIDBaseActivity {
 
@@ -189,7 +180,7 @@ public class ManageActivity extends RFIDBaseActivity {
         }
         showLoadingDialog();
         RequestParams requestParams = new RequestParams(updateUrl);
-        requestParams.addParameter("json", Base64.encode(msgAdapter.getMsg().getBytes()));
+        requestParams.addParameter("json", Base64Utils.encode(msgAdapter.getMsg().getBytes()));
         requestParams.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
         x.http().post(requestParams, new Callback.CommonCallback<String>() {
             @Override

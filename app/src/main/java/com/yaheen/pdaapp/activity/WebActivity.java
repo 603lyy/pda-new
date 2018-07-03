@@ -279,7 +279,13 @@ public class WebActivity extends BaseActivity {
 
         if (hasId) {
             if (refresh) {
-                mWebView.loadUrl("javascript:myrefresh()");
+                mWebView.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadUrl("javascript:myrefresh()");
+                    }
+                });
+//                mWebView.loadUrl("javascript:myrefresh()");
 //                if (typeStr.equals("b")) {
 //                    shortCode = "";
 //                    loadUrl();
@@ -294,7 +300,13 @@ public class WebActivity extends BaseActivity {
                     public void callback() {
                         cancelLoadingDialog();
                         if (refresh) {
-                            mWebView.loadUrl("javascript:myrefresh()");
+//                            mWebView.post(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    mWebView.loadUrl("javascript:myrefresh()");
+//                                }
+//                            });
+//                            mWebView.loadUrl("javascript:myrefresh()");
 //                            if (typeStr.equals("b")) {
 //                                shortCode = "";
 //                                loadUrl();
@@ -309,7 +321,13 @@ public class WebActivity extends BaseActivity {
                     @Override
                     public void cancelCallback() {
                         if (refresh) {
-                            mWebView.loadUrl("javascript:myrefresh()");
+                            mWebView.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mWebView.loadUrl("javascript:myrefresh()");
+                                }
+                            });
+//                            mWebView.loadUrl("javascript:myrefresh()");
                         }
                         cancelLoadingDialog();
                     }

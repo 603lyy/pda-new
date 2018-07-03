@@ -17,7 +17,7 @@ import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.bean.BindBean;
 import com.yaheen.pdaapp.bean.BindUpdataBean;
 import com.yaheen.pdaapp.bean.CheckBean;
-import com.yaheen.pdaapp.util.nfc.Base64;
+import com.yaheen.pdaapp.util.nfc.Base64Utils;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
@@ -212,7 +212,7 @@ public class BindActivity extends RFIDBaseActivity {
 
         RequestParams params = new RequestParams(updateUrl);
         params.addHeader("Accept", "text/html,application/xhtml+xml,application/xml;");
-        params.addQueryStringParameter("json", Base64.encode(jsonObject.toString().getBytes()));
+        params.addQueryStringParameter("json", Base64Utils.encode(jsonObject.toString().getBytes()));
         x.http().get(params, new Callback.CommonCallback<String>() {
             @Override
             public void onSuccess(String result) {

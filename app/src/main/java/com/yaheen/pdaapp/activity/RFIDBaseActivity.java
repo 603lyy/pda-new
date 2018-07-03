@@ -35,9 +35,9 @@ public class RFIDBaseActivity extends BaseActivity {
 
     private List<byte[]> epcList;
     private List<byte[]> epcTestList;
-    private int membank = 3;//数据区
+    private int membank = 2;//数据区
     private int addr = 0;//起始地址
-    private int length = 5;//读取数据的长度
+    private int length = 6;//读取数据的长度
 
     private boolean canRead = false;
 

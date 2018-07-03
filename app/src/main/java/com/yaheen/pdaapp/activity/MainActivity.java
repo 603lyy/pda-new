@@ -52,8 +52,6 @@ public class MainActivity extends RFIDBaseActivity {
         llMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                showToast(R.string.main_activity_scan);
-//                scanUtils.start();
                 startWebActivity(barcodeStr);
             }
         });

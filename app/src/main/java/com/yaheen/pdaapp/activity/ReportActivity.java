@@ -25,21 +25,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.yaheen.pdaapp.R;
 import com.yaheen.pdaapp.bean.ReportBean;
-import com.yaheen.pdaapp.util.ProgersssDialog;
-import com.yaheen.pdaapp.util.nfc.AESUtils;
-import com.yaheen.pdaapp.util.nfc.Base64;
-import com.yaheen.pdaapp.util.nfc.Converter;
-import com.yaheen.pdaapp.util.nfc.NfcVUtil;
 
 import org.xutils.common.Callback;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import static com.yaheen.pdaapp.util.nfc.NFCUtils.ByteArrayToHexString;
-import static com.yaheen.pdaapp.util.nfc.NFCUtils.toStringHex;
 
 public class ReportActivity extends RFIDBaseActivity {
 
