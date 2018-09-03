@@ -50,9 +50,9 @@ public class WebActivity extends BaseActivity {
 
     private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 
-    private String url = "https://lhhk.020szsq.com/tool/toEntryMatch.do?shortLinkCode=";
+    private String url = "http://47.106.142.29:8080/tool/toEntryMatch.do?shortLinkCode=";
 
-    private String baseUrl = "https://lhhk.020szsq.com/tool/toEntryMatch.do";
+    private String baseUrl = "http://47.106.142.29:8080/tool/toEntryMatch.do";
 
 //    测试URL
 //    private String url = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toEntryMatch.do?shortLinkCode=";

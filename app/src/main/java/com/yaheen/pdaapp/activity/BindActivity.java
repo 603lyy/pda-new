@@ -37,7 +37,7 @@ public class BindActivity extends RFIDBaseActivity {
 
 //    private String updateUrl = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/houseNumbers/update.do";
 
-    private String updateUrl = "https://lhhk.020szsq.com/houseNumbers/updateFormDataManagement.do";
+    private String updateUrl = "http://47.106.142.29:8080/houseNumbers/updateFormDataManagement.do";
 
     private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 

@@ -46,7 +46,7 @@ public class ReportActivity extends RFIDBaseActivity {
 
 //    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/tool/reportByApp.do";
 
-    private String url = "https://lhhk.020szsq.com/tool/reportByApp.do";
+    private String url = "http://47.106.142.29:8080/tool/reportByApp.do";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

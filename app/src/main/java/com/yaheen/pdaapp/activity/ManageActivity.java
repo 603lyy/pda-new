@@ -50,9 +50,9 @@ public class ManageActivity extends RFIDBaseActivity {
     //加载图标是否显示
     private boolean isLoading = false;
 
-    private String url = "https://lhhk.020szsq.com/houseNumberRelation/getAllHouseNumberByChip.do";
+    private String url = "http://47.106.142.29:8080/houseNumberRelation/getAllHouseNumberByChip.do";
 
-    private String updateUrl = "https://lhhk.020szsq.com/houseNumberRelation/updateAppByJson.do";
+    private String updateUrl = "http://47.106.142.29:8080/houseNumberRelation/updateAppByJson.do";
 
 //    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/houseNumberRelation/getAllHouseNumberByChip.do";
 //
