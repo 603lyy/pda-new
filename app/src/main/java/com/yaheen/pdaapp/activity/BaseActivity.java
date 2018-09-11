@@ -67,6 +67,8 @@ public class BaseActivity extends AppCompatActivity implements NfcInterface {
     //是否可以读芯片
     private boolean load = false;
 
+    protected String baseUrl = "https://ezhou.yaheen.com/";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

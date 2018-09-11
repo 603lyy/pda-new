@@ -51,9 +51,9 @@ public class WebChangeLocationActivity extends BaseActivity {
 
     private String checkUrl = "http://shortlink.cn/eai/getShortLinkCompleteInformation.do";
 
-    private String url = "http://47.106.142.29:8080/tool/toUpdateLocation.do?shortLinkCode=";
+    private String url = baseUrl + "tool/toUpdateLocation.do?shortLinkCode=";
 
-    private String baseUrl = "http://47.106.142.29:8080/tool/toUpdateLocation.do";
+    private String webBaseUrl = baseUrl + "tool/toUpdateLocation.do";
 
 //    private String url = "https://lyl.tunnel.echomod.cn/whnsubhekou/tool/toUpdateLocation.do?shortLinkCode=";
 //
@@ -80,7 +80,7 @@ public class WebChangeLocationActivity extends BaseActivity {
         if (!TextUtils.isEmpty(shortCode)) {
             mWebView.loadUrl(url + shortCode);
         } else {
-            mWebView.loadUrl(baseUrl);
+            mWebView.loadUrl(webBaseUrl);
         }
     }
 

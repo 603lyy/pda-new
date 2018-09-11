@@ -46,7 +46,7 @@ public class ReportActivity extends RFIDBaseActivity {
 
 //    private String url = "http://lyl.tunnel.echomod.cn/whnsubhekou/tool/reportByApp.do";
 
-    private String url = "http://47.106.142.29:8080/tool/reportByApp.do";
+    private String url = baseUrl + "tool/reportByApp.do";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +102,9 @@ public class ReportActivity extends RFIDBaseActivity {
             byte[] barocode = intent.getByteArrayExtra("barocode");
             int barocodelen = intent.getIntExtra("length", 0);
             barcodeStr = new String(barocode, 0, barocodelen);
-            if(barcodeStr.contains("http://shortlink.cn/")){
+            if (barcodeStr.contains("http://shortlink.cn/")) {
                 tvAddress.setText(barcodeStr);
-            }else {
+            } else {
                 Toast.makeText(ReportActivity.this, R.string.scan_not, Toast.LENGTH_SHORT).show();
             }
             scanUtils.stop();
